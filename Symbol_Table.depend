@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1491598962 source:c:\users\rob\desktop\school\current classes\compiler\symbol_table\source.c
+	"stdlib.h"
+	"stdio.h"
+	"string.h"
+	"hash.h"
+
+1491599089 c:\users\rob\desktop\school\current classes\compiler\symbol_table\hash.h
+	"stdlib.h"
+
