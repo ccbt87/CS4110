@@ -60,13 +60,22 @@ void setSize(int size)
 {
     long long hashIndex = hash(string,size);
     struct node *newnode =  createNode(string, scope);
+    struct node *myNode;
     if (!symbolTable[hashIndex].head)
         {
             symbolTable[hashIndex].head = newnode;
             symbolTable[hashIndex].count = 1;
             return;
         }
-
+    myNode = symbolTable[hashIndex].head;
+    while(myNode != NULL)
+    {
+        if((strcmp(myNode->string, newnode->string) == 0) && (myNode->scope == newnode->scope))
+        {
+            return;
+        }
+        myNode = myNode->next;
+    }
     newnode->next = (symbolTable[hashIndex].head);
     symbolTable[hashIndex].head = newnode;
     symbolTable[hashIndex].count++;
@@ -84,12 +93,12 @@ void display(int size)
         if (symbolTable[i].head != NULL)
         {
             myNode = symbolTable[i].head;
-             printf("\nData at index %d in Symbol Table:\n", i);
-            printf("String     Scope\n");
-            printf("----------------\n");
+             printf("\nData at index %d in Symbol Table:\nCount: %i\n", i,symbolTable[i].count);
+            printf("String                 Scope\n");
+            printf("-----------------------------\n");
             while (myNode != NULL)
             {
-                printf("%-15s", myNode->string);
+                printf("%-25s", myNode->string);
                 printf("%i\n", myNode->scope);
                 myNode = myNode->next;
             }

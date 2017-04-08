@@ -11,9 +11,9 @@ int main()
     long int size;
     int i, scope = 0;
     char* string = malloc(256);
-    fp = fopen("test.txt", "r");
+    fp = fopen("Source.cpp", "r");
     fseek(fp, 1, SEEK_END);
-   size = ftell(fp) / 4;
+   size = ftell(fp)/16;
     printf("%i size\n", size);
     i = size -1;
     for(i; ; i--)
