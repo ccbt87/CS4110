@@ -1,13 +1,14 @@
-#ifndef HEADER_FILE
-#define HEADER_FILE
+#ifndef HEADER_HASH
+#define HEADER_HASH
 
 #include "stdlib.h"
 
 struct hash *symbolTable = NULL;
 int eleCount = 0;
 
-long long hash(char* string, int size);
-void insertToHash(char *string, int scope, int size);
+long long hashkey(char* string, int size);
+struct node* findInScope(char* string, int scope, long long index);
+void insertToHash(char *string, int scope, int size, long long hashIndex);
 void display(int size);
 void setSize(int size);
 
@@ -18,14 +19,16 @@ struct node
     struct node* next;
 
 };
+
 struct hash
 {
     struct node *head;
     int count;
-    void (*insertToHash)(char*, int, int);
+    void (*insertToHash)(char*, int, int, long long);
     void (*display)(int);
     void (*setSize)(int);
-    int (*getSize)();
+    long long (*hashkey)(char*, int);
+    struct node* (*findInScope)(char*, int, long long);
 };
 
  struct node * createNode(char *s, int scope)
@@ -37,9 +40,9 @@ struct hash
     strcpy(newnode->string, s);
     newnode->next = NULL;
     return newnode;
-  }
+  };
 
-long long hash(char* string, int size)
+long long hashkey(char* string, int size)
 {
     long long key;
 
@@ -55,32 +58,40 @@ void setSize(int size)
    symbolTable = (struct hash *)calloc(size, sizeof (struct hash));
 }
 
-
- void insertToHash(char *string, int scope, int size)
+struct node* findInScope(char* string, int scope, long long index)
 {
-    long long hashIndex = hash(string,size);
-    struct node *newnode =  createNode(string, scope);
-    struct node *myNode;
+    struct node *myNode = NULL;
+    if (!symbolTable[index].head)
+    {
+        return myNode;
+    }
+    myNode = symbolTable[index].head;
+    while(myNode != NULL)
+    {
+        if((strcmp(myNode->string, string) == 0) && (myNode->scope == scope))
+        {
+            return myNode;
+        }
+        myNode = myNode->next;
+    }
+    return myNode;
+}
+
+ void insertToHash(char *string, int scope, int size, long long hashIndex)
+{
+    struct node *newnode;
+    newnode =  createNode(string, scope);
+
     if (!symbolTable[hashIndex].head)
         {
             symbolTable[hashIndex].head = newnode;
             symbolTable[hashIndex].count = 1;
             return;
         }
-    myNode = symbolTable[hashIndex].head;
-    while(myNode != NULL)
-    {
-        if((strcmp(myNode->string, newnode->string) == 0) && (myNode->scope == newnode->scope))
-        {
-            return;
-        }
-        myNode = myNode->next;
-    }
     newnode->next = (symbolTable[hashIndex].head);
     symbolTable[hashIndex].head = newnode;
     symbolTable[hashIndex].count++;
     eleCount++;
-    return;
   }
 
 void display(int size)
