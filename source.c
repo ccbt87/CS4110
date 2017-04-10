@@ -25,8 +25,8 @@ int main()
     }
     rewind(fp);
     struct hash symbolTable = {NULL, 0, insertToHash, display, setSize, hashkey, findInScope};
-    struct block activeBlock = {0, NULL, push, pop, printStack};
-    struct block inactiveBlock = {0, NULL, push, pop, printStack};
+    struct block activeBlock = {0, NULL, push, pop, peek, printStack};
+    struct block inactiveBlock = {0, NULL, push, pop, peek, printStack};
     struct node* myNode;
     symbolTable.setSize(i);
     while(fscanf(fp,"%s", string)>0)
