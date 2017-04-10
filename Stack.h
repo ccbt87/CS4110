@@ -14,7 +14,8 @@ struct block
     int scope;
     struct block* next;
     void (*push)(int id);
-    void (*pop)();
+    int (*pop)();
+    int  (*peek)();
     void (*printStack)(char*)
 
 }*head;
@@ -35,12 +36,19 @@ void push(int id)
     head = newBlock;
 }
 
-void pop()
+int pop()
 {
+    int scope = head->scope;
     struct block* myTemp;
     myTemp = head->next;
     free(head);
     head = myTemp;
+    return scope;
+}
+
+int peek()
+{   
+    return head->scope;
 }
 
 void printStack(char* name)

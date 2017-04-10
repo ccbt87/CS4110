@@ -39,15 +39,13 @@ int main()
         else if(strcmp(string, "}") == 0)
         {
             activeBlock.pop();//not working correctly
-            inactiveBlock.push(scope);
-            scope--;
         }
         else
         {
             index = symbolTable.hashkey(string,i);
-            if((myNode = symbolTable.findInScope(string, scope, index)) == NULL)
+            if((myNode = symbolTable.findInScope(string, activeBlock.peek, index)) == NULL)
             {
-                symbolTable.insertToHash(string, scope, i, index);
+                symbolTable.insertToHash(string, activeBlock.peek, i, index);
             }
 
         }
