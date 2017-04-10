@@ -4,6 +4,8 @@
 #include "hash.h"
 #include "Stack.h"
 
+#define DEBUG 1
+
 int prime(int p);
 
 int main()
@@ -14,8 +16,9 @@ int main()
     long long index = 0;
     char* string = malloc(256);
     fp = fopen("test.txt", "r");
+    /*
     fseek(fp, 1, SEEK_END);
-   size = ftell(fp)/16;
+    size = ftell(fp)/16;
     printf("%li size\n", size);
     i = size -1;
     for(; ; i--)
@@ -24,18 +27,27 @@ int main()
             break;
     }
     rewind(fp);
+    */
     struct hash symbolTable = {NULL, 0, insertToHash, display, setSize, hashkey, findInScope};
     struct block activeBlock = {0, NULL, push, pop, peek, printStack};
     //struct block inactiveBlock = {0, NULL, push, pop, peek, printStack};
     struct node* myNode;
-    symbolTable.setSize(i);
+    symbolTable.setSize(13);
+    if(DEBUG)
+    {
+        printf("Before while loop\n");    
+    }
     while(fscanf(fp,"%s", string)>0)
     {
+        if(DEBUG)
+        {
+            printf("Read %s\n", string);
+        }
         if(strcmp(string, "{") == 0)
-            {
-                activeBlock.push(scope);
-                scope++;
-            }
+        {
+            activeBlock.push(scope);
+            scope++;
+        }
         else if(strcmp(string, "}") == 0)
         {
             activeBlock.pop();//not working correctly
@@ -46,17 +58,18 @@ int main()
             if((myNode = symbolTable.findInScope(string, activeBlock.peek(), index)) == NULL)
             {
                 symbolTable.insertToHash(string, activeBlock.peek(), i, index);
-            }
-
+            }          
         }
+        symbolTable.display(i);
+        activeBlock.printStack("Active Block");
         string = malloc(256);
     }
-    symbolTable.display(i);
-    activeBlock.printStack("Active Block");
+    //symbolTable.display(i);
+    //activeBlock.printStack("Active Block");
     //inactiveBlock.printStack("InActive Block");
-   system("pause");
-   free(string);
-   return 0;
+    //system("pause");
+    free(string);
+    return 0;
 }
 
 //check for prime numbers

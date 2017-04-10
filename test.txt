@@ -1,1 +1,1 @@
-{a{b}c}{abd}
+{ a { b } c } { a b d }

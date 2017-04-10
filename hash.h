@@ -31,8 +31,8 @@ struct hash
     struct node* (*findInScope)(char*, int, long long);
 };
 
- struct node * createNode(char *s, int scope)
- {
+struct node * createNode(char *s, int scope)
+{
     struct node *newnode;
     newnode = (struct node *)malloc(sizeof(struct node));
     newnode->scope = scope;
@@ -40,7 +40,7 @@ struct hash
     strcpy(newnode->string, s);
     newnode->next = NULL;
     return newnode;
-  };
+};
 
 long long hashkey(char* string, int size)
 {
@@ -92,7 +92,7 @@ struct node* findInScope(char* string, int scope, long long index)
     symbolTable[hashIndex].head = newnode;
     symbolTable[hashIndex].count++;
     eleCount++;
-  }
+}
 
 void display(int size)
 {
@@ -104,7 +104,7 @@ void display(int size)
         if (symbolTable[i].head != NULL)
         {
             myNode = symbolTable[i].head;
-             printf("\nData at index %d in Symbol Table:\nCount: %i\n", i,symbolTable[i].count);
+            printf("\nData at index %d in Symbol Table:\nCount: %i\n", i,symbolTable[i].count);
             printf("String                 Scope\n");
             printf("-----------------------------\n");
             while (myNode != NULL)
@@ -117,6 +117,6 @@ void display(int size)
 
     }
     return;
-  }
+}
 
 #endif
