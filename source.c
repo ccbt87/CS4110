@@ -43,9 +43,9 @@ int main()
         else
         {
             index = symbolTable.hashkey(string,i);
-            if((myNode = symbolTable.findInScope(string, activeBlock.peek, index)) == NULL)
+            if((myNode = symbolTable.findInScope(string, activeBlock.peek(), index)) == NULL)
             {
-                symbolTable.insertToHash(string, activeBlock.peek, i, index);
+                symbolTable.insertToHash(string, activeBlock.peek(), i, index);
             }
 
         }

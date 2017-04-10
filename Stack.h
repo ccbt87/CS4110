@@ -17,7 +17,7 @@ struct block
     void (*push)(int id);
     int (*pop)();
     int  (*peek)();
-    void (*printStack)(char*)
+    void (*printStack)(char*);
 
 }*head;
 
