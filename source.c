@@ -52,8 +52,8 @@ int main()
         string = malloc(256);
     }
     symbolTable.display(i);
-    activeBlock.printStack("Active Block");
-    inactiveBlock.printStack("InActive Block");
+    //activeBlock.printStack("Active Block");
+    //inactiveBlock.printStack("InActive Block");
    system("pause");
    free(string);
    return 0;

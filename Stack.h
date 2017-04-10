@@ -6,7 +6,8 @@
 #include "string.h"
 
 void push(int);
-void pop();
+int pop();
+int peek();
 void printStack(char* name);
 
 struct block
