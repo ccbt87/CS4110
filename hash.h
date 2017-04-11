@@ -8,6 +8,7 @@ int eleCount = 0;
 
 long long hashkey(char* string, int size);
 struct node* findInScope(char* string, int scope, long long index);
+struct node* findInGlobal(char* string, int* scopes, long long index);
 void insertToHash(char *string, int scope, int size, long long hashIndex);
 void display(int size);
 void setSize(int size);
@@ -29,6 +30,7 @@ struct hash
     void (*setSize)(int);
     long long (*hashkey)(char*, int);
     struct node* (*findInScope)(char*, int, long long);
+    struct node* (*findInGlobal)(char* string, int* scopes, long long index);
 };
 
  struct node * createNode(char *s, int scope)
@@ -48,7 +50,7 @@ long long hashkey(char* string, int size)
 
 	for (key = 1; *string;)
 	{
-		key = (key*(*string++)) % size;
+		key = (key*(long long)(*string++)) % size;
 	}
 	return (key < 0 ? -key : key);
 }
@@ -73,6 +75,25 @@ struct node* findInScope(char* string, int scope, long long index)
             return myNode;
         }
         myNode = myNode->next;
+    }
+    return myNode;
+}
+
+struct node* findInGlobal(char* string, int* scopes, long long index)
+{
+    if (scopes == NULL)
+    {
+        return NULL;
+    }
+    struct node *myNode = NULL;
+    int size = sizeof(scopes)/sizeof(*scopes);
+    for (int i = 0; i < size; i++)
+    {
+        int scope = scopes[i];
+        if ((myNode = findInScope(string, scope, index)) != NULL)
+        {
+            return myNode;
+        }
     }
     return myNode;
 }

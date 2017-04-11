@@ -6,7 +6,8 @@
 #include "string.h"
 
 void push(int);
-void pop();
+int pop();
+int peek();
 void printStack(char* name);
 void create(int);
 
@@ -22,9 +23,10 @@ struct stack
     int size;
     struct block* head;
     void (*push)(int id);
-    void (*pop)();
+    int (*pop)();
     void (*printStack)(char*);
     void (*create)(int);
+    int (*peek)();
 
 };
 
@@ -53,12 +55,19 @@ void push(int id)
 
 }
 
-void pop()
+int pop()
 {
+    int scope = _stack->head->scope;
     struct block* myTemp;
     myTemp = _stack->head->next;
     free(_stack->head);
     _stack->head = myTemp;
+    return scope;
+}
+
+int peek()
+{
+    return _stack->head->scope;
 }
 
 void printStack(char* name)
