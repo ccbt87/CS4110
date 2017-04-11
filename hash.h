@@ -87,7 +87,8 @@ struct node* findInGlobal(char* string, int* scopes, long long index)
     }
     struct node *myNode = NULL;
     int size = sizeof(scopes)/sizeof(*scopes);
-    for (int i = 0; i < size; i++)
+    int i;
+    for (i = 0; i < size; i++)
     {
         int scope = scopes[i];
         if ((myNode = findInScope(string, scope, index)) != NULL)

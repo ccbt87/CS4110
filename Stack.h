@@ -67,7 +67,8 @@ int* list()
         }
         int* scopes = (int*)malloc(length * sizeof(int));
         myBlock = head;
-        for (int i = 0; i < length; i++)
+        int i;
+        for (i = 0; i < length; i++)
         {
             scopes[i] = myBlock->scope;
             myBlock = myBlock->next;
