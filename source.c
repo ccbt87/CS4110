@@ -25,8 +25,10 @@ int main()
     }
     rewind(fp);
     struct hash symbolTable = {NULL, 0, insertToHash, display, setSize, hashkey, findInScope};
-    struct block activeBlock = {0, NULL, push, pop, printStack};
-    struct block inactiveBlock = {0, NULL, push, pop, printStack};
+    struct stack activeBlock = {0, NULL, push, pop, printStack, create};
+    struct stack inactiveBlock = {0, NULL, push, pop, printStack, create};
+    activeBlock.create(i);
+    inactiveBlock.create(i);
     struct node* myNode;
     symbolTable.setSize(i);
     while(fscanf(fp,"%s", string)>0)
@@ -34,6 +36,7 @@ int main()
         if(strcmp(string, "{") == 0)
             {
                 activeBlock.push(scope);
+                activeBlock.size++;
                 scope++;
             }
         else if(strcmp(string, "}") == 0)
