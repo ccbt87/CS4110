@@ -3,8 +3,6 @@
 
 #include "stdlib.h"
 
-#define DEBUG 0
-
 struct hash *symbolTable = NULL;
 int eleCount = 0;
 
