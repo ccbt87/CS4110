@@ -20,7 +20,7 @@ int main()
     
     fseek(fp, 1, SEEK_END);
     size = ftell(fp);
-    if(size > 223)
+    if(size > 271)
     {
         size /= 16;   
         printf("%li size\n", size);
@@ -33,8 +33,8 @@ int main()
     }
     rewind(fp);
     
-    struct hash symbolTable = {NULL, 0, insertToHash, display, setSize, hashkey, findInScope};
-    struct block activeBlock = {0, NULL, push, pop, peek, printStack};
+    struct hash symbolTable = {NULL, 0, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
+    struct block activeBlock = {0, NULL, push, pop, peek, list, printStack};
     //struct block inactiveBlock = {0, NULL, push, pop, peek, printStack};
     struct node* myNode;
     symbolTable.setSize(i);
@@ -58,8 +58,19 @@ int main()
             if(DEBUG){printf("Index %d\n", index);}
             if((myNode = symbolTable.findInScope(string, activeBlock.peek(), index)) == NULL)
             {
-                symbolTable.insertToHash(string, activeBlock.peek(), i, index);
-            }          
+                if((myNode = symbolTable.findInGlobal(string, activeBlock.list(), index)) == NULL)
+                {
+                    symbolTable.insertToHash(string, activeBlock.peek(), i, index);
+                }
+                else
+                {
+                    // found in global scope
+                }
+            } 
+            else
+            {
+                // found in current scope
+            }
         }
         //symbolTable.display(i);
         //activeBlock.printStack("Active Block");
