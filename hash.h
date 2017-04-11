@@ -3,12 +3,14 @@
 
 #include "stdlib.h"
 
+#define DEBUG 0
+
 struct hash *symbolTable = NULL;
 int eleCount = 0;
 
-long long hashkey(char* string, int size);
-struct node* findInScope(char* string, int scope, long long index);
-void insertToHash(char *string, int scope, int size, long long hashIndex);
+int hashkey(char* string, int size);
+struct node* findInScope(char* string, int scope, int index);
+void insertToHash(char *string, int scope, int size, int hashIndex);
 void display(int size);
 void setSize(int size);
 
@@ -24,11 +26,11 @@ struct hash
 {
     struct node *head;
     int count;
-    void (*insertToHash)(char*, int, int, long long);
+    void (*insertToHash)(char*, int, int, int);
     void (*display)(int);
     void (*setSize)(int);
-    long long (*hashkey)(char*, int);
-    struct node* (*findInScope)(char*, int, long long);
+    int (*hashkey)(char*, int);
+    struct node* (*findInScope)(char*, int, int);
 };
 
 struct node * createNode(char *s, int scope)
@@ -42,14 +44,25 @@ struct node * createNode(char *s, int scope)
     return newnode;
 };
 
-long long hashkey(char* string, int size)
+int hashkey(char* string, int size)
 {
+    /*
     long long key;
-
+    
 	for (key = 1; *string;)
 	{
-		key = (key*(*string++)) % size;
-	}
+		key = (key*(*string++)) % size;        
+	}   
+    return (key < 0 ? -key : key);
+    */
+    int key = 0;
+    int length = strlen(string);
+    for (int i = 0; i < length; i++)
+    {       
+        key += *string;
+        *string++;
+    }
+    key %= size; 
 	return (key < 0 ? -key : key);
 }
 
@@ -58,7 +71,7 @@ void setSize(int size)
    symbolTable = (struct hash *)calloc(size, sizeof (struct hash));
 }
 
-struct node* findInScope(char* string, int scope, long long index)
+struct node* findInScope(char* string, int scope, int index)
 {
     struct node *myNode = NULL;
     if (!symbolTable[index].head)
@@ -77,7 +90,7 @@ struct node* findInScope(char* string, int scope, long long index)
     return myNode;
 }
 
- void insertToHash(char *string, int scope, int size, long long hashIndex)
+ void insertToHash(char *string, int scope, int size, int hashIndex)
 {
     struct node *newnode;
     newnode =  createNode(string, scope);
