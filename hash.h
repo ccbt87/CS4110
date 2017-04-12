@@ -57,7 +57,7 @@ long long hashkey(char* string, int size)
 
 void setSize(int size)
 {
-   symbolTable = (struct hash *)calloc(size, sizeof (struct hash));
+    symbolTable = (struct hash *)calloc(size, sizeof(struct hash));
 }
 
 struct node* findInScope(char* string, int scope, long long index)
@@ -93,10 +93,12 @@ struct node* findInGlobal(char* string, int* scopes, long long index)
         int scope = scopes[i];
         if ((myNode = findInScope(string, scope, index)) != NULL)
         {
+            free(scopes);
             return myNode;
         }
     }
-    return myNode;
+    free(scopes);
+    return NULL;
 }
 
 void insertToHash(char *string, int scope, int size, long long hashIndex)

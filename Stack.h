@@ -68,10 +68,10 @@ int* list()
         int* scopes = (int*)malloc(length * sizeof(int));
         myBlock = head;
         int i;
-        for (i = 0; i < length; i++)
+        for (i = 0; i < length - 1; i++)
         {
-            scopes[i] = myBlock->scope;
             myBlock = myBlock->next;
+            scopes[i] = myBlock->scope;           
         }
         return scopes;
     }

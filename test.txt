@@ -1,1 +1,1 @@
-{ abc { b } c } { a b d }
+G { abc { b } c } { a b d }

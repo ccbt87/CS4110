@@ -12,7 +12,7 @@ int main()
 {
     FILE *fp;
     long int size;
-    int i = 13; 
+    int i = 13; // default prime
     int scope = 0;
     int index = 0;
     char* string = malloc(256);
@@ -37,7 +37,9 @@ int main()
     struct block activeBlock = {0, NULL, push, pop, peek, list, printStack};
     //struct block inactiveBlock = {0, NULL, push, pop, peek, printStack};
     struct node* myNode;
-    symbolTable.setSize(i);
+    symbolTable.setSize(i);     // set the symbol table size to i
+    activeBlock.push(scope);    // push the global scope #0
+    scope++;    // normal scopes start from #1
     while(fscanf(fp,"%s", string)>0)
     {
         if(DEBUG){printf("Read %s\n", string);}
@@ -54,13 +56,13 @@ int main()
         }
         else
         {
-            index = symbolTable.hashkey(string, i);
+            index = symbolTable.hashkey(string, i); // 
             if(DEBUG){printf("Index %d\n", index);}
-            if((myNode = symbolTable.findInScope(string, activeBlock.peek(), index)) == NULL)
-            {
-                if((myNode = symbolTable.findInGlobal(string, activeBlock.list(), index)) == NULL)
-                {
-                    symbolTable.insertToHash(string, activeBlock.peek(), i, index);
+            if((myNode = symbolTable.findInScope(string, activeBlock.peek(), index)) == NULL)   // find in current scope
+            {   // not found in currect scope
+                if((myNode = symbolTable.findInGlobal(string, activeBlock.list(), index)) == NULL)  // find in global scopes
+                {   // not found in global scope
+                    symbolTable.insertToHash(string, activeBlock.peek(), i, index); // insert identifer to symbol table with currect scope #
                 }
                 else
                 {
@@ -73,11 +75,12 @@ int main()
             }
         }
         //symbolTable.display(i);
-        //activeBlock.printStack("Active Block");
+        activeBlock.printStack("Active Block");
         string = malloc(256);
     }
-    symbolTable.display(i);
-    activeBlock.printStack("Active Block");
+    activeBlock.pop();  // pop the global scope #0
+    symbolTable.display(i); // display the symbol table
+    activeBlock.printStack("Active Block"); // display the active block # stack
     //inactiveBlock.printStack("InActive Block");
     //system("pause");
     free(string);
