@@ -20,7 +20,6 @@ struct block
 
 struct stack
 {
-    int size;
     struct block* head;
     void (*push)(int id);
     int (*pop)();
@@ -30,11 +29,12 @@ struct stack
 
 };
 
-struct stack* _stack = NULL;
+struct stack* _stack;
 
 void create(int size)
 {
     _stack = (struct stack *)calloc(size, sizeof (struct stack));
+    _stack->head = NULL;
 }
 
 void push(int id)

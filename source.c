@@ -14,27 +14,33 @@ int main()
     int i, scope = 0;
     long long index = 0;
     char* string = malloc(256);
-    fp = fopen("test.txt", "r");
+    fp = fopen("text.txt", "r");
     fseek(fp, 1, SEEK_END);
+    size = ftell(fp);
     if(size > 271)
     {
         size /= 16;
-    }
-
-    printf("%li size\n", size);
-    i = size -1;
-    for(; ; i--)
-    {
-        if(prime(i))
+         printf("%li size\n", size);
+        i = size -1;
+        for(; ; i--)
+        {
+            if(prime(i))
             break;
+        }
     }
+    else
+        i = 13;
+    printf("Actual size %i\n", i);
+
     rewind(fp);
     struct hash symbolTable = {NULL, 0, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
-    struct stack activeBlock = {0, NULL, push, pop, printStack, create}, peek;
-    //struct stack inactiveBlock = {0, NULL, push, pop, printStack, create};
-    activeBlock.create(i);
+    struct stack activeBlock = {NULL, push, pop, printStack, create, peek};
+    activeBlock.create(1);
     struct node* myNode;
     symbolTable.setSize(i);
+     activeBlock.push(scope);
+            if(DEBUG){printf("Scope %d pushed\n", scope);}
+            scope++;
     while(fscanf(fp,"%s", string)>0)
     {
          if(DEBUG){printf("Read %s\n", string);}
@@ -53,13 +59,14 @@ int main()
         {
             index = symbolTable.hashkey(string, i);
             if(DEBUG){printf("Index %d\n", index);}
-            if((myNode = symbolTable.findInScope(string, activeBlock.peek(), index)) == NULL)
+
+            if((myNode = symbolTable.findInScope(string, activeBlock.peek() , index)) == NULL)
             {
-                if((myNode = symbolTable.findInGlobal(string, activeBlock.size(), index)) == NULL)
+                if((myNode = symbolTable.findInGlobal(string, activeBlock, index)) == NULL)
                 {
-                    symbolTable.insertToHash(string, activeBlock.peek(), i, index);
+                    symbolTable.insertToHash(string, activeBlock.peek(), index);
                 }
-                else
+                //else
                 {
                     // found in global scope
                 }
@@ -73,7 +80,7 @@ int main()
     }
     symbolTable.display(i);
     activeBlock.printStack("Active Block");
-
+    system("pause");
    free(string);
    return 0;
 }
