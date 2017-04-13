@@ -32,7 +32,7 @@ int main()
     }
     rewind(fp);
     
-    struct hash symbolTable = {NULL, 0, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
+    struct hash symbolTable = {NULL, 0, 0, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
     struct block activeBlock = {0, NULL, create, push, pop, peek, list, printStack};
     
     activeBlock.create(i);
@@ -55,7 +55,7 @@ int main()
         }
         else
         {
-            index = symbolTable.hashkey(string, i); // 
+            index = symbolTable.hashkey(string); // 
             if(DEBUG){printf("Index %d\n", index);}
             if((myNode = symbolTable.findInScope(string, activeBlock.peek(), index)) == NULL)   // find in current scope
             {   // not found in currect scope
@@ -77,7 +77,7 @@ int main()
         activeBlock.printStack("Active Block");
         string = malloc(256);
     }
-    symbolTable.display(i); // display the symbol table
+    symbolTable.display(); // display the symbol table
     activeBlock.printStack("Active Block"); // display the active block # stack
 
     free(string);

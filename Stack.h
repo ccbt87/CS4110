@@ -31,7 +31,7 @@ struct stack
     void (*printStack)(char*);
 };
 
-struct stack* {_stack = NULL;}
+struct stack* _stack = NULL;
 
 void create(int size)
 {

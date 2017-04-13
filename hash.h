@@ -7,11 +7,11 @@ typedef struct hash *ST;
 ST symbolTable;
 int eleCount = 0;
 
-long long hashkey(char* string, int size);
+long long hashkey(char* string);
 struct node* findInScope(char* string, int scope, long long index);
 struct node* findInGlobal(char* string, int* scopes, long long index);
 void insertToHash(char *string, int scope, long long hashIndex);
-void display(int size);
+void display();
 void setSize(int size);
 
 struct node
@@ -28,9 +28,9 @@ struct hash
     int count;
     int size;
     void (*insertToHash)(char*, int, long long);
-    void (*display)(int);
+    void (*display)();
     void (*setSize)(int);
-    long long (*hashkey)(char*, int);
+    long long (*hashkey)(char*);
     struct node* (*findInScope)(char*, int, long long);
     struct node* (*findInGlobal)(char*, int*, long long);
 };
@@ -46,10 +46,10 @@ struct node * createNode(char *s, int scope)
     return newnode;
 };
 
-long long hashkey(char* string, int size)
+long long hashkey(char* string)
 {
     long long key;
-
+    int size = symbolTable->size;
 	for (key = 1; *string;)
 	{
 		key = (key*(long long)(*string++)) % size;
@@ -59,8 +59,9 @@ long long hashkey(char* string, int size)
 
 void setSize(int size)
 {
-   symbolTable = malloc(sizeof(*symbolTable));
-   symbolTable->head = malloc(sizeof(struct node *)*size);
+    symbolTable = malloc(sizeof(*symbolTable));
+    symbolTable->head = malloc(sizeof(struct node *)*size);
+    symbolTable->size = size;
     for(size-1; size >= 0; size--)
         symbolTable->head[size] = NULL;
 }
@@ -123,10 +124,11 @@ void insertToHash(char *string, int scope, long long hashIndex)
     eleCount++;
 }
 
-void display(int size)
+void display()
 {
     struct node *myNode;
-    int i;
+    int i, size;
+    size = symbolTable->size;
     for (i = 0; i < size; i++)
     {
 
