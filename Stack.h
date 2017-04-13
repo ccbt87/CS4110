@@ -5,6 +5,7 @@
 #include "stdio.h"
 #include "string.h"
 
+void create(int);
 void push(int);
 int pop();
 int peek();
@@ -15,65 +16,76 @@ struct block
 {
     int scope;
     struct block* next;
+
+};
+
+struct stack
+{
+    int size;
+    struct block* head;
+    void (*create)(int);
     void (*push)(int id);
     int (*pop)();
     int  (*peek)();
     int* (*list)();
     void (*printStack)(char*);
-}*head;
+};
+
+struct stack* {_stack = NULL;}
+
+void create(int size)
+{
+    _stack = (struct stack *)calloc(size, sizeof (struct stack));
+}
 
 void push(int id)
 {
     struct block *newBlock;
-    if(!head)
+    if(!_stack->head)
     {
-        head = (struct block *)malloc(1*sizeof(struct block));
-        head->scope = id;
-        head->next = NULL;
+        newBlock = (struct block *)malloc(1*sizeof(struct block));
+        newBlock->scope = id;
+        newBlock->next = NULL;
+        _stack->head = newBlock;
         return;
     }
     newBlock = (struct block *)malloc(1*sizeof(struct block));
-    newBlock->next = head;
+    newBlock->next = _stack->head;
     newBlock->scope = id;
-    head = newBlock;
+    _stack->head = newBlock;
+
 }
 
 int pop()
 {
-    int scope = head->scope;
+    int scope = _stack->head->scope;
     struct block* myTemp;
-    myTemp = head->next;
-    free(head);
-    head = myTemp;
+    myTemp = _stack->head->next;
+    free(_stack->head);
+    _stack->head = myTemp;
     return scope;
 }
 
 int peek()
 {   
-    return head->scope;
+    return _stack->head->scope;
 }
 
 int* list()
 {
-    int length = 0;
     struct block* myBlock;
-    if(head)
+    int size = _stack->size;
+    if(size > 0)
     {
-        myBlock = head;
-        while(myBlock != NULL)
-        {
-            myBlock = myBlock->next;
-            length++;
-        }
-        int* scopes = (int*)malloc(length * sizeof(int));
-        myBlock = head;
+        int* scopeList = (int*)malloc(size * sizeof(int));
+        myBlock = _stack->head;
         int i;
-        for (i = 0; i < length - 1; i++)
+        for (i = 0; i < size - 1; i++)
         {
             myBlock = myBlock->next;
-            scopes[i] = myBlock->scope;           
+            scopeList[i] = myBlock->scope;           
         }
-        return scopes;
+        return scopeList;
     }
     return NULL;
 }
@@ -81,10 +93,10 @@ int* list()
 void printStack(char* name)
 {
     struct block* myBlock;
-    if(head)
+    if(_stack->head)
     {
         printf("%s Contents\n", name);
-        myBlock = head;
+        myBlock = _stack->head;
         while(myBlock != NULL)
         {
             printf("Block ID: %i\n", myBlock->scope);

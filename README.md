@@ -3,9 +3,10 @@
 ```
 Language: C
 OS: Ubuntu 16.10
+IDE/Editor: Code::Blocks, Notepad++ v7, VIM 7.4.1829
 Compiler: gcc 6.2.0
 ```
-## Structure
+## Structures
 ## Assumptions
 ## Compile and Run
 Launch a Terminal, enter following command
@@ -16,8 +17,6 @@ Execute
 ```
 ./source
 ```
-
-
 ## Test
 ### Case 1
 no x anywhere

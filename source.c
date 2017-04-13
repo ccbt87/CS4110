@@ -4,9 +4,8 @@
 #include "hash.h"
 #include "Stack.h"
 
-#define DEBUG 0
-
 int prime(int p);
+#define DEBUG 0
 
 int main()
 {
@@ -34,12 +33,12 @@ int main()
     rewind(fp);
     
     struct hash symbolTable = {NULL, 0, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
-    struct block activeBlock = {0, NULL, push, pop, peek, list, printStack};
-    //struct block inactiveBlock = {0, NULL, push, pop, peek, printStack};
+    struct block activeBlock = {0, NULL, create, push, pop, peek, list, printStack};
+    
+    activeBlock.create(i);
     struct node* myNode;
     symbolTable.setSize(i);     // set the symbol table size to i
-    activeBlock.push(scope);    // push the global scope #0
-    scope++;    // normal scopes start from #1
+
     while(fscanf(fp,"%s", string)>0)
     {
         if(DEBUG){printf("Read %s\n", string);}
@@ -62,7 +61,7 @@ int main()
             {   // not found in currect scope
                 if((myNode = symbolTable.findInGlobal(string, activeBlock.list(), index)) == NULL)  // find in global scopes
                 {   // not found in global scope
-                    symbolTable.insertToHash(string, activeBlock.peek(), i, index); // insert identifer to symbol table with currect scope #
+                    symbolTable.insertToHash(string, activeBlock.peek(), index); // insert identifer to symbol table with currect scope #
                 }
                 else
                 {
@@ -78,11 +77,9 @@ int main()
         activeBlock.printStack("Active Block");
         string = malloc(256);
     }
-    activeBlock.pop();  // pop the global scope #0
     symbolTable.display(i); // display the symbol table
     activeBlock.printStack("Active Block"); // display the active block # stack
-    //inactiveBlock.printStack("InActive Block");
-    //system("pause");
+
     free(string);
     return 0;
 }
