@@ -40,7 +40,7 @@ struct node * createNode(char *s, int scope)
     struct node *newnode;
     newnode = (struct node *)malloc(sizeof(struct node));
     newnode->scope = scope;
-    newnode->string = malloc(256);
+    newnode->string = malloc(strlen(s));
     strcpy(newnode->string, s);
     newnode->next = NULL;
     return newnode;
@@ -94,7 +94,7 @@ struct node* findInGlobal(char* string, int* scopeList, long long index)
     struct node *myNode = NULL;
     int size = sizeof(scopeList)/sizeof(*scopeList);
     int i;
-    for (i = 0; i < size; i++)
+    for (i = 1; i < size; i++)
     {
         int scope = scopeList[i];
         if ((myNode = findInScope(string, scope, index)) != NULL)
@@ -135,7 +135,7 @@ void display()
         if (symbolTable->head[i])
         {
             myNode = symbolTable->head[i];
-            printf("\nData at index %d in Symbol Table:\n", i,symbolTable->count);
+            printf("\nData at index %d in Symbol Table:\nCount: %i\n", i, symbolTable->count);
             printf("String                 Scope\n");
             printf("-----------------------------\n");
             while (myNode != NULL)
