@@ -41,7 +41,7 @@ struct hash
     struct node *newnode;
     newnode = (struct node *)malloc(sizeof(struct node));
     newnode->scope = scope;
-    newnode->string = malloc(256);
+    newnode->string = malloc(strlen(s));
     strcpy(newnode->string, s);
     newnode->next = NULL;
     return newnode;
@@ -93,9 +93,6 @@ struct node* findInGlobal(char* string, Stack scopes, long long index)//not work
     }
     struct node *myNode = NULL;
     struct block *myHead = scopes.head;
-    //int size = sizeof(scopes)/sizeof(*scopes);
-    int i = 0;
-    //for (i = 0; i < size; i++)
     while(myHead != NULL)
     {
         int scope = myHead->scope;
@@ -135,7 +132,7 @@ void display(int size)
         if (symbolTable->head[i])
         {
             myNode = symbolTable->head[i];
-             printf("\nData at index %d in Symbol Table:\n", i,symbolTable->count);
+             printf("\nData at index %d in Symbol Table:\nCount: %i\n", i,symbolTable->count);
             printf("String                 Scope\n");
             printf("-----------------------------\n");
             while (myNode != NULL)

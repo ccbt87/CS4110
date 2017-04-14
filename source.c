@@ -10,29 +10,34 @@ int prime(int p);
 int main()
 {
     FILE *fp;
-    long int size;
+    int lines = 0;
     int i, scope = 0;
     long long index = 0;
+    char c;
     char* string = malloc(256);
     fp = fopen("text.txt", "r");
-    fseek(fp, 1, SEEK_END);
-    size = ftell(fp);
-    if(size > 271)
+    while((c = fgetc(fp)) != EOF)
     {
-        size /= 16;
-         printf("%li size\n", size);
-        i = size -1;
+        if(c == '\n')
+        {
+            lines++;
+        }
+    }
+    rewind(fp);
+    if(lines > 17)
+    {
+        i = lines;
         for(; ; i--)
         {
             if(prime(i))
-            break;
+                break;
         }
     }
     else
+    {
         i = 13;
-    printf("Actual size %i\n", i);
+    }
 
-    rewind(fp);
     struct hash symbolTable = {NULL, 0, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
     struct stack activeBlock = {NULL, push, pop, printStack, create, peek};
     activeBlock.create(1);
@@ -58,7 +63,7 @@ int main()
         else
         {
             index = symbolTable.hashkey(string, i);
-            if(DEBUG){printf("Index %d\n", index);}
+            if(DEBUG){printf("Index %lld\n", index);}
 
             if((myNode = symbolTable.findInScope(string, activeBlock.peek() , index)) == NULL)
             {
