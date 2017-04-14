@@ -38,23 +38,23 @@ int main()
     }
     struct hash symbolTable = {NULL, 0, 0, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
     struct stack activeBlock = {NULL, push, pop, printStack, create, peek};
-    activeBlock.create(1);
+    activeBlock.create();
     struct node* myNode;
     symbolTable.setSize(prime);     // set the symbol table size to i
-    char string[1024];
+    char string[256];
     while(fscanf(fp,"%s", string)>0)
     {
         if(DEBUG){printf("Read %s, ", string);}
         if(strcmp(string, "{") == 0)
         {
             activeBlock.push(scope);
-            if(DEBUG){printf("Scope %d pushed\n", scope);}
+            if(DEBUG){printf("Scope %d pushed", scope);}
             scope++;
         }
         else if(strcmp(string, "}") == 0)
         {
             int scope = activeBlock.pop();
-            if(DEBUG){printf("Scope %d poped\n", scope);}
+            if(DEBUG){printf("Scope %d poped", scope);}
         }
         else
         {
@@ -67,17 +67,21 @@ int main()
                 {   // not found in global scope
                     if(DEBUG){printf("not found in global scope, ");}
                     symbolTable.insertToHash(string, activeBlock.peek(), index); // insert identifer to symbol table with currect scope #
+                    if(DEBUG){printf("inserted to symbol table");}
                 }
                 else
                 {
                     // found in global scope
+                    if(DEBUG){printf("found in global scope");}
                 }
             } 
             else
             {
                 // found in current scope
+                if(DEBUG){printf("found in current scope");}
             }
         }
+        if(DEBUG){printf("\n");}
         //symbolTable.display();
         activeBlock.printStack("Active Block");
         //string = malloc(256);

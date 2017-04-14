@@ -40,7 +40,7 @@ struct hash
 struct node * createNode(char *s, int scope)
 {
     struct node *newnode;
-    newnode = (struct node *)malloc(sizeof(struct node));
+    newnode = malloc(sizeof(struct node));
     newnode->scope = scope;
     newnode->string = malloc(strlen(s));
     strcpy(newnode->string, s);
@@ -62,7 +62,7 @@ long long hashkey(char* string)
 void setSize(int size)
 {
     symbolTable = malloc(sizeof(*symbolTable));
-    symbolTable->head = malloc(sizeof(struct node *)*size);
+    symbolTable->head = malloc(sizeof(struct node)*size);
     symbolTable->size = size;
     for(size-1; size >= 0; size--)
         symbolTable->head[size] = NULL;
