@@ -2,14 +2,16 @@
 #define HEADER_HASH
 
 #include "stdlib.h"
+#include "Stack.h"
 
 typedef struct hash *ST;
+typedef struct stack Stack;
 ST symbolTable;
 int eleCount = 0;
 
 long long hashkey(char* string);
 struct node* findInScope(char* string, int scope, long long index);
-struct node* findInGlobal(char* string, int* scopes, long long index);
+struct node* findInGlobal(char* string, Stack scopes, long long index);
 void insertToHash(char *string, int scope, long long hashIndex);
 void display();
 void setSize(int size);
@@ -32,7 +34,7 @@ struct hash
     void (*setSize)(int);
     long long (*hashkey)(char*);
     struct node* (*findInScope)(char*, int, long long);
-    struct node* (*findInGlobal)(char*, int*, long long);
+    struct node* (*findInGlobal)(char*, Stack, long long);
 };
 
 struct node * createNode(char *s, int scope)
@@ -85,26 +87,24 @@ struct node* findInScope(char* string, int scope, long long index)
     return myNode;
 }
 
-struct node* findInGlobal(char* string, int* scopeList, long long index)
+struct node* findInGlobal(char* string, Stack scopes, long long index)
 {
-    if (scopeList == NULL)
+    if (scopes.head == NULL)
     {
         return NULL;
     }
     struct node *myNode = NULL;
-    int size = sizeof(scopeList)/sizeof(*scopeList);
-    int i;
-    for (i = 1; i < size; i++)
+    struct block *myHead = scopes.head;
+    while(myHead != NULL)
     {
-        int scope = scopeList[i];
+        int scope = myHead->scope;
         if ((myNode = findInScope(string, scope, index)) != NULL)
         {
-            free(scopeList);
             return myNode;
         }
+        myHead = myHead->next;
     }
-    free(scopeList);
-    return NULL;
+    return myNode;
 }
 
 void insertToHash(char *string, int scope, long long hashIndex)

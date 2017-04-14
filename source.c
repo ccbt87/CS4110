@@ -37,8 +37,8 @@ int main()
         }
     }
     struct hash symbolTable = {NULL, 0, 0, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
-    struct stack activeBlock = {0, NULL, create, push, pop, peek, list, printStack};
-    activeBlock.create();
+    struct stack activeBlock = {NULL, push, pop, printStack, create, peek};
+    activeBlock.create(1);
     struct node* myNode;
     symbolTable.setSize(prime);     // set the symbol table size to i
     char string[1024];
@@ -63,7 +63,7 @@ int main()
             if((myNode = symbolTable.findInScope(string, activeBlock.peek(), index)) == NULL)   // find in current scope
             {   // not found in currect scope
                 if(DEBUG){printf("not found in currect scope, ");}
-                if((myNode = symbolTable.findInGlobal(string, activeBlock.list(), index)) == NULL)  // find in global scopes
+                if((myNode = symbolTable.findInGlobal(string, activeBlock, index)) == NULL)  // find in global scopes
                 {   // not found in global scope
                     if(DEBUG){printf("not found in global scope, ");}
                     symbolTable.insertToHash(string, activeBlock.peek(), index); // insert identifer to symbol table with currect scope #

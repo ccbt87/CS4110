@@ -5,12 +5,11 @@
 #include "stdio.h"
 #include "string.h"
 
-void create();
-void push(int id);
+void push(int);
 int pop();
 int peek();
-int* list();
 void printStack(char* name);
+void create(int);
 
 struct block
 {
@@ -21,21 +20,20 @@ struct block
 
 struct stack
 {
-    int size;
     struct block* head;
-    void (*create)();
-    void (*push)(int);
+    void (*push)(int id);
     int (*pop)();
-    int  (*peek)();
-    int* (*list)();
     void (*printStack)(char*);
+    void (*create)(int);
+    int (*peek)();
+
 };
 
 struct stack* _stack;
 
-void create()
+void create(int size)
 {
-    _stack = (struct stack *)calloc(1, sizeof (struct stack));
+    _stack = (struct stack *)calloc(size, sizeof (struct stack));
     _stack->head = NULL;
 }
 
@@ -54,6 +52,7 @@ void push(int id)
     newBlock->next = _stack->head;
     newBlock->scope = id;
     _stack->head = newBlock;
+
 }
 
 int pop()
@@ -67,27 +66,8 @@ int pop()
 }
 
 int peek()
-{   
-    return _stack->head->scope;
-}
-
-int* list()
 {
-    struct block* myBlock;
-    int size = _stack->size;
-    if(size > 0)
-    {
-        int* scopeList = (int*)malloc(size * sizeof(int));
-        myBlock = _stack->head;
-        int i;
-        for (i = 0; i < size; i++)
-        {           
-            scopeList[i] = myBlock->scope;
-            myBlock = myBlock->next;            
-        }
-        return scopeList;
-    }
-    return NULL;
+    return _stack->head->scope;
 }
 
 void printStack(char* name)
