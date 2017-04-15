@@ -70,7 +70,7 @@ int main()
         {
             index = symbolTable.hashkey(string, i);
             if(DEBUG){printf("Index %li\n", index);}
-            //printf(" or address %p\n", &symbolTable.head[index]);
+          
             if((myNode = symbolTable.findInScope(symbolTable.head, string, activeBlock.peek(activeBlock.head) , index)) == NULL)
             {
                 if((myNode = symbolTable.findInGlobal(symbolTable.head, activeBlock.head, string, index)) == NULL)
@@ -90,12 +90,9 @@ int main()
                 // found in current scope
             }
         }
-        //string = malloc(sizeof(string));
     }
     symbolTable.display(symbolTable.head, i);
     activeBlock.printStack(activeBlock.head, "Active Block");
-    system("pause");
-   //free(string);
    return 0;
 }
 
