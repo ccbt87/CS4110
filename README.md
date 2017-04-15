@@ -26,8 +26,8 @@ Compiler: gcc 4.4.7, 5.4.0, 6.2.0
 *
 ## Assumptions
 * Valid input will always starts with a '{' which indicates scope open
-* Space is the delimiter
-* Identifers can be anything other than '{' , '}' or space
+* White space is the delimiter
+* Identifers can be anything other than '{' , '}' or any type of white space
 * 
 
 ## Compile and Run
