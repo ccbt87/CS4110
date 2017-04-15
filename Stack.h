@@ -5,11 +5,6 @@
 #include "stdio.h"
 #include "string.h"
 
-void push(int id);
-int pop();
-int peek();
-void printStack(char* name);
-void create();
 
 struct block
 {
@@ -21,68 +16,61 @@ struct block
 struct stack
 {
     struct block* head;
-    void (*push)(int);
-    int (*pop)();
-    void (*printStack)(char*);
-    void (*create)();
-    int (*peek)();
+    struct block*(*push)(struct block* b, int id);
+    int (*pop)(struct block* b);
+    void (*printStack)(struct block* h, char*);
+    int (*peek)(struct block* h);
 
 };
 
-struct stack* _stack;
-
-void create()
-{
-    _stack = calloc(1, sizeof(struct stack));
-    _stack->head = NULL;
-}
-
-void push(int id)
+struct block* push(struct block* b, int id)
 {
     struct block *newBlock;
-    if(!_stack->head)
+    if(!b)
     {
-        newBlock = malloc(1*sizeof(struct block));
+        newBlock = malloc(sizeof(newBlock));
         newBlock->scope = id;
         newBlock->next = NULL;
-        _stack->head = newBlock;
-        return;
+        b = newBlock;
+        return b;
     }
-    newBlock = malloc(1*sizeof(struct block));
-    newBlock->next = _stack->head;
+    newBlock = malloc(sizeof(newBlock));
+    newBlock->next = b;
     newBlock->scope = id;
-    _stack->head = newBlock;
+    b = newBlock;
+    return b;
 
 }
 
-int pop()
+int pop(struct block* b)
 {
-    int scope = _stack->head->scope;
+    int scope = b->scope;
     struct block* myTemp;
-    myTemp = _stack->head->next;
-    free(_stack->head);
-    _stack->head = myTemp;
+    myTemp = b;
+    b = myTemp->next;
+    //free(myTemp);
     return scope;
 }
 
-int peek()
+int peek(struct block* h)
 {
-    return _stack->head->scope;
+    return h->scope;
 }
 
-void printStack(char* name)
+void printStack(struct block* h, char* name)
 {
     struct block* myBlock;
-    if(_stack->head)
+    if(h)
     {
         printf("%s Contents\n", name);
-        myBlock = _stack->head;
+        myBlock = h;
         while(myBlock != NULL)
         {
             printf("Block ID: %i\n", myBlock->scope);
             myBlock = myBlock->next;
         }
     }
+    free(myBlock);
 }
 
 #endif

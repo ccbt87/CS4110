@@ -4,21 +4,13 @@
 #include "stdlib.h"
 #include "Stack.h"
 
-typedef struct hash *ST;
-typedef struct stack Stack;
-ST symbolTable;
-int eleCount = 0;
+//typedef struct hash* ST;
+//ST symbolTable;
 
-long long hashkey(char* string);
-struct node* findInScope(char* string, int scope, long long index);
-struct node* findInGlobal(char* string, Stack scopes, long long index);
-void insertToHash(char *string, int scope, long long hashIndex);
-void display();
-void setSize(int size);
 
 struct node
 {
-    char* string;
+    char* Id;
     int scope;
     struct node* next;
 
@@ -28,57 +20,61 @@ struct hash
 {
     struct node **head;
     int count;
-    int size;
-    void (*insertToHash)(char*, int, long long);
-    void (*display)();
-    void (*setSize)(int);
-    long long (*hashkey)(char*);
-    struct node* (*findInScope)(char*, int, long long);
-    struct node* (*findInGlobal)(char*, Stack, long long);
+    void (*insertToHash)(struct hash*, char*, int, long long);
+    void (*display)(struct node**, int);
+    struct node** (*setSize)(struct node**, int);
+    long long (*hashkey)(char*, int);
+    struct node* (*findInScope)(struct node**, char*, int, long long);
+    struct node* (*findInGlobal)(struct node**, struct block* , char*, long long);
 };
 
-struct node * createNode(char *s, int scope)
-{
-    struct node *newnode;
-    newnode = malloc(sizeof(struct node));
+ struct node * createNode(char *s, int scope)
+ {
+    struct node* newnode;
+    newnode = malloc(sizeof(newnode));
     newnode->scope = scope;
-    newnode->string = malloc(strlen(s));
-    strcpy(newnode->string, s);
+    newnode->Id = malloc(strlen(s));
+    strcpy(newnode->Id, s);
     newnode->next = NULL;
     return newnode;
-};
+  };
 
-long long hashkey(char* string)
+long long hashkey(char* myString, int s)
 {
     long long key;
-    int size = symbolTable->size;
-	for (key = 1; *string;)
+
+	for (key = 1; *myString;)
 	{
-		key = (key*(long long)(*string++)) % size;
+		key = (key*(long long)(*myString++)) % s;
 	}
 	return (key < 0 ? -key : key);
 }
 
-void setSize(int size)
+struct node** setSize(struct node** h, int s)
 {
-    symbolTable = malloc(sizeof(*symbolTable));
-    symbolTable->head = malloc(sizeof(struct node)*size);
-    symbolTable->size = size;
-    for(size-1; size >= 0; size--)
-        symbolTable->head[size] = NULL;
+   //HashTable = malloc(sizeof(*HashTable));
+   h = malloc(s * sizeof(h));
+    for(s = s-1; s >= 0; s--)
+    {
+        h[s] = NULL;//malloc(sizeof(struct node *));
+        //HashTable->head[s]->scope = -1;
+        //HashTable->head[s]->next = NULL;
+    }
+    return h;
 }
 
-struct node* findInScope(char* string, int scope, long long index)
+struct node* findInScope(struct node** h, char* myString, int scope, long long index)
 {
     struct node *myNode = NULL;
-    if (symbolTable->head[index] == NULL)
+    if (h[index] == NULL)
     {
+        free(myNode);
         return myNode;
     }
-    myNode = symbolTable->head[index];
+    myNode = h[index];
     while(myNode != NULL)
     {
-        if ((strcmp(myNode->string, string) == 0) && (myNode->scope == scope))
+        if((strcmp(myNode->Id, myString) == 0) && (myNode->scope == scope))
         {
             return myNode;
         }
@@ -87,67 +83,68 @@ struct node* findInScope(char* string, int scope, long long index)
     return myNode;
 }
 
-struct node* findInGlobal(char* string, Stack scopes, long long index)
+struct node* findInGlobal(struct node** h, struct block* b, char* myString, long long index)//not working
 {
-    if (scopes.head == NULL)
+    if (b == NULL)
     {
         return NULL;
     }
-    struct node *myNode = NULL;
-    struct block *myHead = scopes.head;
-    while(myHead != NULL)
+    struct node* myNode = NULL;
+    struct block* myBlock = b;
+    int i = 0;
+    while(myBlock != NULL)
     {
-        int scope = myHead->scope;
-        if ((myNode = findInScope(string, scope, index)) != NULL)
+        int scope = myBlock->scope;
+        if ((myNode = findInScope(h, myString, scope, index)) != NULL)
         {
             return myNode;
         }
-        myHead = myHead->next;
+        myBlock = myBlock->next;
     }
+    free(myBlock);
     return myNode;
 }
 
-void insertToHash(char *string, int scope, long long hashIndex)
+ void insertToHash(struct node** h, char *myString, int scope, long long hashIndex)
 {
     struct node *newnode;
-    newnode =  createNode(string, scope);
+    newnode =  createNode(myString, scope);
 
-    if (!symbolTable->head[hashIndex])
+    if (!h[hashIndex])
         {
-            symbolTable->head[hashIndex] = newnode;
-            symbolTable->count = 1;
+            h[hashIndex] = newnode;
+            //HashTable->count = 1;
             return;
         }
-    newnode->next = (symbolTable->head[hashIndex]);
-    symbolTable->head[hashIndex] = newnode;
-    symbolTable->count++;
-    eleCount++;
-}
+    newnode->next = h[hashIndex];
+    h[hashIndex] = newnode;
 
-void display()
+  }
+
+void display(struct node** h, int s)
 {
     struct node *myNode;
-    int i, size;
-    size = symbolTable->size;
-    for (i = 0; i < size; i++)
+    int i;
+    for (i = 0; i < s; i++)
     {
 
-        if (symbolTable->head[i])
+        if (h[i])
         {
-            myNode = symbolTable->head[i];
-            printf("\nData at index %d in Symbol Table:\nCount: %i\n", i, symbolTable->count);
+            myNode = h[i];
+             printf("\nData at index %d in Symbol Table:\n", i);
             printf("String                 Scope\n");
             printf("-----------------------------\n");
             while (myNode != NULL)
             {
-                printf("%-25s", myNode->string);
+                printf("%-25s", myNode->Id);
                 printf("%i\n", myNode->scope);
                 myNode = myNode->next;
             }
         }
 
     }
+    free(myNode);
     return;
-}
+  }
 
 #endif
