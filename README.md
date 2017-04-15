@@ -155,7 +155,7 @@ Scope       String
 Data at index 8 in Symbol Table:
 Scope       String
 ------------------
-0           c                      0
+0           c
 ```
 ### Case 5
 Not all scopes will be closed to show Active Blocks.
