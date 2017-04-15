@@ -2,35 +2,30 @@
 #define HEADER_HASH
 
 #include "stdlib.h"
-#include "Stack.h"
+#include "stack.h"
 
-//typedef struct hash* ST;
-//ST symbolTable;
-
-
-struct node
+typedef struct
 {
     char* Id;
     int scope;
     struct node* next;
 
-};
+}node;
 
-struct hash
+typedef struct
 {
-    struct node **head;
-    int count;
-    void (*insertToHash)(struct node**, char*, int, long long);
-    void (*display)(struct node**, int);
-    struct node** (*setSize)(struct node**, int);
+    node **head;
+    void (*insertToHash)(node**, char*, int, long long);
+    void (*display)(node**, int);
+    node** (*setSize)(node**, int);
     long long (*hashkey)(char*, int);
-    struct node* (*findInScope)(struct node**, char*, int, long long);
-    struct node* (*findInGlobal)(struct node**, struct block* , char*, long long);
-};
+    node* (*findInScope)(node**, char*, int, long long);
+    node* (*findInGlobal)(node**, block* , char*, long long);
+}Hash;
 
- struct node * createNode(char *s, int scope)
+ node * createNode(char *s, int scope)
  {
-    struct node* newnode;
+    node* newnode;
     newnode = malloc(sizeof(newnode));
     newnode->scope = scope;
     newnode->Id = malloc(strlen(s));
@@ -52,20 +47,17 @@ long long hashkey(char* myString, int s)
 
 struct node** setSize(struct node** h, int s)
 {
-   //HashTable = malloc(sizeof(*HashTable));
    h = malloc(s * sizeof(h));
     for(s = s-1; s >= 0; s--)
     {
-        h[s] = NULL;//malloc(sizeof(struct node *));
-        //HashTable->head[s]->scope = -1;
-        //HashTable->head[s]->next = NULL;
+        h[s] = NULL;
     }
     return h;
 }
 
-struct node* findInScope(struct node** h, char* myString, int scope, long long index)
+node* findInScope(node** h, char* myString, int scope, long long index)
 {
-    struct node *myNode = NULL;
+    node *myNode = NULL;
     if (h[index] == NULL)
     {
         free(myNode);
@@ -83,14 +75,14 @@ struct node* findInScope(struct node** h, char* myString, int scope, long long i
     return myNode;
 }
 
-struct node* findInGlobal(struct node** h, struct block* b, char* myString, long long index)//not working
+node* findInGlobal(node** h, block* b, char* myString, long long index)//not working
 {
     if (b == NULL)
     {
         return NULL;
     }
-    struct node* myNode = NULL;
-    struct block* myBlock = b;
+    node* myNode = NULL;
+    block* myBlock = b;
     int i = 0;
     while(myBlock != NULL)
     {
@@ -105,15 +97,14 @@ struct node* findInGlobal(struct node** h, struct block* b, char* myString, long
     return myNode;
 }
 
- void insertToHash(struct node** h, char *myString, int scope, long long hashIndex)
+ void insertToHash(node** h, char *myString, int scope, long long hashIndex)
 {
-    struct node *newnode;
+    node *newnode;
     newnode =  createNode(myString, scope);
 
     if (!h[hashIndex])
         {
             h[hashIndex] = newnode;
-            //HashTable->count = 1;
             return;
         }
     newnode->next = h[hashIndex];
@@ -121,9 +112,9 @@ struct node* findInGlobal(struct node** h, struct block* b, char* myString, long
 
   }
 
-void display(struct node** h, int s)
+void display(node** h, int s)
 {
-    struct node *myNode;
+    node *myNode;
     int i;
     for (i = 0; i < s; i++)
     {

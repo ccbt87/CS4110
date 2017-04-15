@@ -2,7 +2,7 @@
 #include "stdio.h"
 #include "string.h"
 #include "hash.h"
-#include "Stack.h"
+#include "stack.h"
 
 int prime(int p);
 #define DEBUG 1
@@ -12,7 +12,8 @@ int main()
     FILE *fp;
     long int size;
     int i, scope = 0;
-    long int index = 0;
+    int first = 1;
+    long long index = 0;
     char string[256];
     fp = fopen("test.txt", "r");
     fseek(fp, 1, SEEK_END);
@@ -33,27 +34,24 @@ int main()
     if (DEBUG) {printf("Actual size %i\n", i);}
 
     rewind(fp);
-    struct hash symbolTable = {NULL, 0, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
-    struct stack activeBlock = {NULL, push, pop, printStack, peek};
-    struct node* myNode;
+    Hash symbolTable = {NULL, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
+    Stack activeBlock = {NULL, push, pop, printStack, peek};
+    node* myNode;
     symbolTable.head = symbolTable.setSize(symbolTable.head, i);
 
-    //symbolTable = malloc(sizeof(struct hash*));
-   /*symbolTable.head = malloc(sizeof(struct node **)*i);
-    for(i = i-1; i >= 0; i--)
-    {
-        symbolTable.head[i] = NULL;//malloc(sizeof(struct node*));
-        //symbolTable.head[i]->scope = -1;
-        //printf(" this address %p\n", symbolTable->head[i]);
-         printf(" or address %p\n", &symbolTable.head[i]);
-    }*/
-
-
-     activeBlock.head = activeBlock.push(activeBlock.head, scope);
-            if(DEBUG){printf("Scope %d pushed\n", scope);}
-            scope++;
     while(fscanf(fp,"%s", string)>0)
     {
+        if(first == 1)
+        {
+            if(strcmp(string, "{") != 0)
+                {
+                    activeBlock.head = activeBlock.push(activeBlock.head, scope);
+                    if(DEBUG){printf("Scope %d pushed\n", scope);}
+                    scope++;
+                }
+            first = 0;
+        }
+
        if(DEBUG) {printf("string %s action ", string);}
          if(DEBUG){printf("Read %s\n", string);}
         if(strcmp(string, "{") == 0)
@@ -64,7 +62,8 @@ int main()
         }
         else if(strcmp(string, "}") == 0)
         {
-            int scope = activeBlock.pop(activeBlock.head);
+            int scope = activeBlock.peek(activeBlock.head);
+            activeBlock.head = activeBlock.pop(activeBlock.head);
             if(DEBUG){printf("Scope %d popped\n", scope);}
         }
         else
@@ -91,9 +90,12 @@ int main()
                 // found in current scope
             }
         }
+        //string = malloc(sizeof(string));
     }
     symbolTable.display(symbolTable.head, i);
     activeBlock.printStack(activeBlock.head, "Active Block");
+    system("pause");
+   //free(string);
    return 0;
 }
 
