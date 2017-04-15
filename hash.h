@@ -20,7 +20,7 @@ struct hash
 {
     struct node **head;
     int count;
-    void (*insertToHash)(struct hash*, char*, int, long long);
+    void (*insertToHash)(struct node**, char*, int, long long);
     void (*display)(struct node**, int);
     struct node** (*setSize)(struct node**, int);
     long long (*hashkey)(char*, int);
