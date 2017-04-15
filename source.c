@@ -5,7 +5,7 @@
 #include "stack.h"
 
 int prime(int p);
-#define DEBUG 1
+#define DEBUG 0
 
 int main()
 {
@@ -34,9 +34,9 @@ int main()
     if (DEBUG) {printf("Actual size %i\n", i);}
 
     rewind(fp);
-    Hash symbolTable = {NULL, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
-    Stack activeBlock = {NULL, push, pop, printStack, peek};
-    node* myNode;
+    struct Hash symbolTable = {NULL, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
+    struct Stack activeBlock = {NULL, push, pop, printStack, peek};
+    struct node* myNode;
     symbolTable.head = symbolTable.setSize(symbolTable.head, i);
 
     while(fscanf(fp,"%s", string)>0)
@@ -69,8 +69,8 @@ int main()
         else
         {
             index = symbolTable.hashkey(string, i);
-            if(DEBUG){printf("Index %li\n", index);}
-          
+            if(DEBUG){printf("Index %lli\n", index);}
+
             if((myNode = symbolTable.findInScope(symbolTable.head, string, activeBlock.peek(activeBlock.head) , index)) == NULL)
             {
                 if((myNode = symbolTable.findInGlobal(symbolTable.head, activeBlock.head, string, index)) == NULL)

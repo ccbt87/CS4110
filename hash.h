@@ -4,28 +4,28 @@
 #include "stdlib.h"
 #include "stack.h"
 
-typedef struct
+struct node
 {
     char* Id;
     int scope;
     struct node* next;
 
-}node;
+};
 
-typedef struct
+struct Hash
 {
-    node **head;
-    void (*insertToHash)(node**, char*, int, long long);
-    void (*display)(node**, int);
-    node** (*setSize)(node**, int);
+    struct node **head;
+    void (*insertToHash)(struct node**, char*, int, long long);
+    void (*display)(struct node**, int);
+    struct node** (*setSize)(struct node**, int);
     long long (*hashkey)(char*, int);
-    node* (*findInScope)(node**, char*, int, long long);
-    node* (*findInGlobal)(node**, block* , char*, long long);
-}Hash;
+   struct  node* (*findInScope)(struct node**, char*, int, long long);
+    struct node* (*findInGlobal)(struct node**, struct block* , char*, long long);
+};
 
- node * createNode(char *s, int scope)
+struct node * createNode(char *s, int scope)
  {
-    node* newnode;
+   struct node* newnode;
     newnode = malloc(sizeof(newnode));
     newnode->scope = scope;
     newnode->Id = malloc(strlen(s));
@@ -55,9 +55,9 @@ struct node** setSize(struct node** h, int s)
     return h;
 }
 
-node* findInScope(node** h, char* myString, int scope, long long index)
+struct node* findInScope(struct node** h, char* myString, int scope, long long index)
 {
-    node *myNode = NULL;
+    struct node *myNode = NULL;
     if (h[index] == NULL)
     {
         free(myNode);
@@ -75,14 +75,14 @@ node* findInScope(node** h, char* myString, int scope, long long index)
     return myNode;
 }
 
-node* findInGlobal(node** h, block* b, char* myString, long long index)
+struct node* findInGlobal(struct node** h, struct block* b, char* myString, long long index)
 {
     if (b == NULL)
     {
         return NULL;
     }
-    node* myNode = NULL;
-    block* myBlock = b;
+    struct node* myNode = NULL;
+    struct block* myBlock = b;
     int i = 0;
     while(myBlock != NULL)
     {
@@ -97,9 +97,9 @@ node* findInGlobal(node** h, block* b, char* myString, long long index)
     return myNode;
 }
 
- void insertToHash(node** h, char *myString, int scope, long long hashIndex)
+ void insertToHash(struct node** h, char *myString, int scope, long long hashIndex)
 {
-    node *newnode;
+    struct node *newnode;
     newnode =  createNode(myString, scope);
 
     if (!h[hashIndex])
@@ -112,9 +112,9 @@ node* findInGlobal(node** h, block* b, char* myString, long long index)
 
   }
 
-void display(node** h, int s)
+void display(struct node** h, int s)
 {
-    node *myNode;
+    struct node *myNode;
     int i;
     for (i = 0; i < s; i++)
     {
@@ -123,12 +123,12 @@ void display(node** h, int s)
         {
             myNode = h[i];
              printf("\nData at index %d in Symbol Table:\n", i);
-            printf("String                 Scope\n");
-            printf("-----------------------------\n");
+            printf("Scope       String\n");
+            printf("------------------\n");
             while (myNode != NULL)
             {
-                printf("%-25s", myNode->Id);
-                printf("%i\n", myNode->scope);
+                printf("%-12d", myNode->scope);
+                printf("%s\n", myNode->Id);
                 myNode = myNode->next;
             }
         }

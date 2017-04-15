@@ -6,26 +6,26 @@
 #include "string.h"
 
 int pop_scope;
-typedef struct
+struct block
 {
     int scope;
     struct block* next;
 
-}block;
+};
 
-typedef struct
+struct Stack
 {
-    block* head;
-    block*(*push)(block* b, int id);
-    block*(*pop)(block* b);
-    void (*printStack)(block* h, char*);
-    int (*peek)(block* h);
+    struct block* head;
+    struct block*(*push)(struct block* b, int id);
+    struct block*(*pop)(struct block* b);
+    void (*printStack)(struct block* h, char*);
+    int (*peek)(struct block* h);
 
-}Stack;
+};
 
-block* push(block* b, int id)
+struct block* push(struct block* b, int id)
 {
-    block *newBlock;
+    struct block* newBlock;
     if(!b)
     {
         newBlock = malloc(sizeof(newBlock));
@@ -42,24 +42,24 @@ block* push(block* b, int id)
 
 }
 
-block* pop(block* b)
+struct block* pop(struct block* b)
 {
     int scope = b->scope;
-    block* myTemp;
+    struct block* myTemp;
     myTemp = b;
     b = myTemp->next;
     pop_scope = scope;
     return b;
 }
 
-int peek(block* h)
+int peek(struct block* h)
 {
     return h->scope;
 }
 
-void printStack(block* h, char* name)
+void printStack(struct block* h, char* name)
 {
-    block* myBlock;
+    struct block* myBlock;
     if(h)
     {
         printf("%s Contents\n", name);
