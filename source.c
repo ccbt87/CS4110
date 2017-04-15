@@ -41,8 +41,8 @@ int main()
     activeBlock.create();
     struct node* myNode;
     symbolTable.setSize(prime); // set the symbol table size to prime
-    char string[256];
-
+    
+    char string[256]; // buffer to read in string from a file
     while(fscanf(fp,"%s", string)>0)
     {
         if(DEBUG){printf("Read %s, ", string);}
@@ -70,7 +70,7 @@ int main()
                     symbolTable.insertToHash(string, activeBlock.peek(), index); // insert identifer to symbol table with currect scope #
                     if(DEBUG){printf("inserted to symbol table");}
                 }
-                //else
+                else
                 {
                     // found in global scope
                     if(DEBUG){printf("found in global scope");}
@@ -89,7 +89,6 @@ int main()
     fclose(fp);
     symbolTable.display(); // display the symbol table
     activeBlock.printStack("Active Block"); // display the active block # stack
-    system("pause");
     return 0;
 }
 

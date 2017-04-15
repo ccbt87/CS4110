@@ -6,9 +6,9 @@ Hongjie Z.
 ## Environment
 ```
 Language: C
-OS: Ubuntu 16.10
-IDE/Editor: Code::Blocks, Notepad++ v7, VIM 7.4.1829
-Compiler: gcc 6.2.0
+OS: Windows 10, CentOS 6.8, Ubuntu 16.10
+IDE/Editor: Code::Blocks 16.01, Notepad++ v7, VIM 7.4.1829
+Compiler: gcc 4.4.7, 5.4.0, 6.2.0
 ```
 ## Structures
 ### hash.h - One symbol table
