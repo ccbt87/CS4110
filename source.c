@@ -11,7 +11,7 @@ int isPrime(int p);
 int main()
 {
     FILE *fp;
-    int lines = 0;
+    long int size = 0;
     int prime = 0;
     int scope = 0;
     int index = 0;    
