@@ -75,7 +75,7 @@ node* findInScope(node** h, char* myString, int scope, long long index)
     return myNode;
 }
 
-node* findInGlobal(node** h, block* b, char* myString, long long index)//not working
+node* findInGlobal(node** h, block* b, char* myString, long long index)
 {
     if (b == NULL)
     {
