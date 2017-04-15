@@ -5,12 +5,10 @@
 #include "stdio.h"
 #include "string.h"
 
-int pop_scope;
 struct block
 {
     int scope;
     struct block* next;
-
 };
 
 struct Stack
@@ -18,9 +16,8 @@ struct Stack
     struct block* head;
     struct block*(*push)(struct block* b, int id);
     struct block*(*pop)(struct block* b);
-    void (*printStack)(struct block* h, char*);
-    int (*peek)(struct block* h);
-
+    void (*printStack)(struct block* b, char*);
+    int (*peek)(struct block* b);
 };
 
 struct block* push(struct block* b, int id)
@@ -39,7 +36,6 @@ struct block* push(struct block* b, int id)
     newBlock->scope = id;
     b = newBlock;
     return b;
-
 }
 
 struct block* pop(struct block* b)
@@ -48,22 +44,21 @@ struct block* pop(struct block* b)
     struct block* myTemp;
     myTemp = b;
     b = myTemp->next;
-    pop_scope = scope;
     return b;
 }
 
-int peek(struct block* h)
+int peek(struct block* b)
 {
-    return h->scope;
+    return b->scope;
 }
 
-void printStack(struct block* h, char* name)
+void printStack(struct block* b, char* name)
 {
     struct block* myBlock;
-    if(h)
+    if(b)
     {
         printf("%s Contents\n", name);
-        myBlock = h;
+        myBlock = b;
         while(myBlock != NULL)
         {
             printf("Block ID: %i\n", myBlock->scope);

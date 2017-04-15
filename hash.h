@@ -9,7 +9,6 @@ struct node
     char* Id;
     int scope;
     struct node* next;
-
 };
 
 struct Hash
@@ -19,25 +18,24 @@ struct Hash
     void (*display)(struct node**, int);
     struct node** (*setSize)(struct node**, int);
     long long (*hashkey)(char*, int);
-   struct  node* (*findInScope)(struct node**, char*, int, long long);
+    struct  node* (*findInScope)(struct node**, char*, int, long long);
     struct node* (*findInGlobal)(struct node**, struct block* , char*, long long);
 };
 
 struct node * createNode(char *s, int scope)
- {
-   struct node* newnode;
+{
+    struct node* newnode;
     newnode = malloc(sizeof(newnode));
     newnode->scope = scope;
     newnode->Id = malloc(strlen(s));
     strcpy(newnode->Id, s);
     newnode->next = NULL;
     return newnode;
-  };
+};
 
 long long hashkey(char* myString, int s)
 {
     long long key;
-
 	for (key = 1; *myString;)
 	{
 		key = (key*(long long)(*myString++)) % s;
@@ -47,7 +45,7 @@ long long hashkey(char* myString, int s)
 
 struct node** setSize(struct node** h, int s)
 {
-   h = malloc(s * sizeof(h));
+    h = malloc(s * sizeof(h));
     for(s = s-1; s >= 0; s--)
     {
         h[s] = NULL;
@@ -97,20 +95,18 @@ struct node* findInGlobal(struct node** h, struct block* b, char* myString, long
     return myNode;
 }
 
- void insertToHash(struct node** h, char *myString, int scope, long long hashIndex)
+void insertToHash(struct node** h, char *myString, int scope, long long hashIndex)
 {
     struct node *newnode;
     newnode =  createNode(myString, scope);
-
     if (!h[hashIndex])
-        {
-            h[hashIndex] = newnode;
-            return;
-        }
+    {
+        h[hashIndex] = newnode;
+        return;
+    }
     newnode->next = h[hashIndex];
     h[hashIndex] = newnode;
-
-  }
+}
 
 void display(struct node** h, int s)
 {
@@ -118,11 +114,10 @@ void display(struct node** h, int s)
     int i;
     for (i = 0; i < s; i++)
     {
-
         if (h[i])
         {
             myNode = h[i];
-             printf("\nData at index %d in Symbol Table:\n", i);
+            printf("\nData at index %d in Symbol Table:\n", i);
             printf("Scope       String\n");
             printf("------------------\n");
             while (myNode != NULL)
@@ -136,6 +131,6 @@ void display(struct node** h, int s)
     }
     free(myNode);
     return;
-  }
+}
 
 #endif

@@ -4,40 +4,41 @@
 #include "hash.h"
 #include "stack.h"
 
-int prime(int p);
 #define DEBUG 0
+
+int isPrime(int p);
 
 int main()
 {
     FILE *fp;
     long int size;
-    int i, scope = 0;
+    int prime, scope = 0;
     int first = 1;
     long long index = 0;
     char string[256];
     fp = fopen("test.txt", "r");
     fseek(fp, 1, SEEK_END);
     size = ftell(fp);
+    rewind(fp);
     if(size > 271)
     {
         size /= 16;
         if(DEBUG) {printf("%li size\n", size);}
-        i = size -1;
-        for(; ; i--)
+        prime = size -1;
+        for(; ; prime--)
         {
-            if(prime(i))
+            if(isPrime(prime))
             break;
         }
     }
     else
-        i = 13;
-    if (DEBUG) {printf("Actual size %i\n", i);}
-
-    rewind(fp);
+        prime = 13;
+    if (DEBUG) {printf("Actual size %i\n", prime);}
+   
     struct Hash symbolTable = {NULL, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
     struct Stack activeBlock = {NULL, push, pop, printStack, peek};
     struct node* myNode;
-    symbolTable.head = symbolTable.setSize(symbolTable.head, i);
+    symbolTable.head = symbolTable.setSize(symbolTable.head, prime);
 
     while(fscanf(fp,"%s", string)>0)
     {
@@ -52,8 +53,8 @@ int main()
             first = 0;
         }
 
-       if(DEBUG) {printf("string %s action ", string);}
-         if(DEBUG){printf("Read %s\n", string);}
+        if(DEBUG) {printf("string %s action ", string);}
+        if(DEBUG){printf("Read %s\n", string);}
         if(strcmp(string, "{") == 0)
         {
             activeBlock.head = activeBlock.push(activeBlock.head, scope);
@@ -68,7 +69,7 @@ int main()
         }
         else
         {
-            index = symbolTable.hashkey(string, i);
+            index = symbolTable.hashkey(string, prime);
             if(DEBUG){printf("Index %lli\n", index);}
 
             if((myNode = symbolTable.findInScope(symbolTable.head, string, activeBlock.peek(activeBlock.head) , index)) == NULL)
@@ -80,31 +81,29 @@ int main()
                 }
                 else
                 {
-                   if(DEBUG) {printf("Found in Global\n");}
+                    if(DEBUG) {printf("Found in Global\n");}
                     // found in global scope
                 }
             }
             else
             {
-               if(DEBUG) {printf("Found in Local\n");}
+                if(DEBUG) {printf("Found in Local\n");}
                 // found in current scope
             }
         }
     }
-    symbolTable.display(symbolTable.head, i);
+    symbolTable.display(symbolTable.head, prime);
     activeBlock.printStack(activeBlock.head, "Active Block");
-   return 0;
+    return 0;
 }
 
 //check for prime numbers
-int prime(int p)
+int isPrime(int p)
 {
     int i;
     for(i = 2; p%i != 0; i++);
-
-        if(p==i)
-            return 1;
-        else
-            return 0;
-
+    if(p==i)
+        return 1;
+    else
+        return 0;
 }
