@@ -5,7 +5,6 @@
 #include "stdio.h"
 #include "string.h"
 
-int pop_scope;
 struct block
 {
     int scope;
