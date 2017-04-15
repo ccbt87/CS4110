@@ -9,11 +9,11 @@ typedef struct stack Stack;
 ST symbolTable;
 int eleCount = 0;
 
-long long hashkey(char* string, int size);
+long long hashkey(char* string);
 struct node* findInScope(char* string, int scope, long long index);
 struct node* findInGlobal(char* string, Stack scopes, long long index);
 void insertToHash(char *string, int scope, long long hashIndex);
-void display(int size);
+void display();
 void setSize(int size);
 
 struct node
@@ -28,29 +28,30 @@ struct hash
 {
     struct node **head;
     int count;
+    int size;
     void (*insertToHash)(char*, int, long long);
-    void (*display)(int);
+    void (*display)();
     void (*setSize)(int);
-    long long (*hashkey)(char*, int);
+    long long (*hashkey)(char*);
     struct node* (*findInScope)(char*, int, long long);
-    struct node* (*findInGlobal)(char* string, Stack scopes, long long index);
+    struct node* (*findInGlobal)(char*, Stack, long long);
 };
 
- struct node * createNode(char *s, int scope)
- {
+struct node * createNode(char *s, int scope)
+{
     struct node *newnode;
-    newnode = (struct node *)malloc(sizeof(struct node));
+    newnode = malloc(sizeof(struct node));
     newnode->scope = scope;
     newnode->string = malloc(strlen(s));
     strcpy(newnode->string, s);
     newnode->next = NULL;
     return newnode;
-  };
+};
 
-long long hashkey(char* string, int size)
+long long hashkey(char* string)
 {
     long long key;
-
+    int size = symbolTable->size;
 	for (key = 1; *string;)
 	{
 		key = (key*(long long)(*string++)) % size;
@@ -60,8 +61,9 @@ long long hashkey(char* string, int size)
 
 void setSize(int size)
 {
-   symbolTable = malloc(sizeof(*symbolTable));
-   symbolTable->head = malloc(sizeof(struct node *)*size);
+    symbolTable = malloc(sizeof(*symbolTable));
+    symbolTable->head = malloc(sizeof(struct node)*size);
+    symbolTable->size = size;
     for(size-1; size >= 0; size--)
         symbolTable->head[size] = NULL;
 }
@@ -76,7 +78,7 @@ struct node* findInScope(char* string, int scope, long long index)
     myNode = symbolTable->head[index];
     while(myNode != NULL)
     {
-        if((strcmp(myNode->string, string) == 0) && (myNode->scope == scope))
+        if ((strcmp(myNode->string, string) == 0) && (myNode->scope == scope))
         {
             return myNode;
         }
@@ -85,7 +87,7 @@ struct node* findInScope(char* string, int scope, long long index)
     return myNode;
 }
 
-struct node* findInGlobal(char* string, Stack scopes, long long index)//not working
+struct node* findInGlobal(char* string, Stack scopes, long long index)
 {
     if (scopes.head == NULL)
     {
@@ -105,7 +107,7 @@ struct node* findInGlobal(char* string, Stack scopes, long long index)//not work
     return myNode;
 }
 
- void insertToHash(char *string, int scope, long long hashIndex)
+void insertToHash(char *string, int scope, long long hashIndex)
 {
     struct node *newnode;
     newnode =  createNode(string, scope);
@@ -120,19 +122,20 @@ struct node* findInGlobal(char* string, Stack scopes, long long index)//not work
     symbolTable->head[hashIndex] = newnode;
     symbolTable->count++;
     eleCount++;
-  }
+}
 
-void display(int size)
+void display()
 {
     struct node *myNode;
-    int i;
+    int i, size;
+    size = symbolTable->size;
     for (i = 0; i < size; i++)
     {
 
         if (symbolTable->head[i])
         {
             myNode = symbolTable->head[i];
-             printf("\nData at index %d in Symbol Table:\nCount: %i\n", i,symbolTable->count);
+            printf("\nData at index %d in Symbol Table:\nCount: %i\n", i, symbolTable->count);
             printf("String                 Scope\n");
             printf("-----------------------------\n");
             while (myNode != NULL)
@@ -145,6 +148,6 @@ void display(int size)
 
     }
     return;
-  }
+}
 
 #endif

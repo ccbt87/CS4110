@@ -4,101 +4,104 @@
 #include "hash.h"
 #include "Stack.h"
 
-int prime(int p);
-#define DEBUG 0
+#define DEBUG 1
+
+int isPrime(int p);
 
 int main()
 {
     FILE *fp;
     int lines = 0;
-    int i, scope = 0;
-    long long index = 0;
-    char c;
-    char* string = malloc(256);
-    fp = fopen("text.txt", "r");
-    while((c = fgetc(fp)) != EOF)
-    {
-        if(c == '\n')
-        {
-            lines++;
-        }
-    }
+    int prime = 0;
+    int scope = 0;
+    int index = 0;    
+    
+    fp = fopen("test.txt", "r");
+    fseek(fp, 1, SEEK_END);
+    size = ftell(fp);
     rewind(fp);
-    if(lines > 17)
+    if(size > 271)
     {
-        i = lines;
-        for(; ; i--)
+        size /= 16;   
+        printf("%li size\n", size);
+        prime = size -1;
+        for(; ; prime--)
         {
-            if(prime(i))
+            if(isPrime(prime))
                 break;
         }
-    }
+    }    
     else
     {
-        i = 13;
+        prime = 13;
     }
-
-    struct hash symbolTable = {NULL, 0, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
+    
+    struct hash symbolTable = {NULL, 0, 0, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
     struct stack activeBlock = {NULL, push, pop, printStack, create, peek};
-    activeBlock.create(1);
+    activeBlock.create();
     struct node* myNode;
-    symbolTable.setSize(i);
-     activeBlock.push(scope);
-            if(DEBUG){printf("Scope %d pushed\n", scope);}
-            scope++;
+    symbolTable.setSize(prime); // set the symbol table size to prime
+    char string[256];
+
     while(fscanf(fp,"%s", string)>0)
     {
-         if(DEBUG){printf("Read %s\n", string);}
+        if(DEBUG){printf("Read %s, ", string);}
         if(strcmp(string, "{") == 0)
         {
             activeBlock.push(scope);
-            if(DEBUG){printf("Scope %d pushed\n", scope);}
+            if(DEBUG){printf("Scope %d pushed", scope);}
             scope++;
         }
         else if(strcmp(string, "}") == 0)
         {
             int scope = activeBlock.pop();
-            if(DEBUG){printf("Scope %d popped\n", scope);}
+            if(DEBUG){printf("Scope %d poped", scope);}
         }
         else
         {
-            index = symbolTable.hashkey(string, i);
-            if(DEBUG){printf("Index %lld\n", index);}
-
-            if((myNode = symbolTable.findInScope(string, activeBlock.peek() , index)) == NULL)
-            {
-                if((myNode = symbolTable.findInGlobal(string, activeBlock, index)) == NULL)
-                {
-                    symbolTable.insertToHash(string, activeBlock.peek(), index);
+            index = symbolTable.hashkey(string); // 
+            if(DEBUG){printf("Index %d, ", index);}
+            if((myNode = symbolTable.findInScope(string, activeBlock.peek(), index)) == NULL)   // find in current scope
+            {   // not found in currect scope
+                if(DEBUG){printf("not found in currect scope, ");}
+                if((myNode = symbolTable.findInGlobal(string, activeBlock, index)) == NULL)  // find in global scopes
+                {   // not found in global scope
+                    if(DEBUG){printf("not found in global scope, ");}
+                    symbolTable.insertToHash(string, activeBlock.peek(), index); // insert identifer to symbol table with currect scope #
+                    if(DEBUG){printf("inserted to symbol table");}
                 }
                 //else
                 {
                     // found in global scope
+                    if(DEBUG){printf("found in global scope");}
                 }
-            }
+            } 
             else
             {
                 // found in current scope
+                if(DEBUG){printf("found in current scope");}
             }
         }
-        string = malloc(256);
+        if(DEBUG){printf("\n");}
+        //symbolTable.display();
+        activeBlock.printStack("Active Block");
     }
-    symbolTable.display(i);
-    activeBlock.printStack("Active Block");
+    fclose(fp);
+    symbolTable.display(); // display the symbol table
+    activeBlock.printStack("Active Block"); // display the active block # stack
     system("pause");
-   free(string);
-   return 0;
+    return 0;
 }
 
-//check for prime numbers
-int prime(int p)
+// check for prime numbers
+int isPrime(int p)
 {
     int i;
     for(i = 2; p%i != 0; i++);
 
-        if(p==i)
-            return 1;
-        else
-            return 0;
+    if(p==i)
+        return 1;
+    else
+        return 0;
 
 }
