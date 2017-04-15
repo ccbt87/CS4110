@@ -56,7 +56,7 @@ no x anywhere
 x in local
 #### Input
 ```
-{ a b c } x x } }
+{ a b c { x x } }
 ```
 #### Output
 ```
