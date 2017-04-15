@@ -15,11 +15,13 @@ int main()
     int prime, scope = 0;
     int first = 1;
     long long index = 0;
-    char string[256];
-    fp = fopen("test.txt", "r");
+    char string[256]; // buffer to read in string from a file
+    fp = fopen("test.txt", "r"); // specify input file name here
     fseek(fp, 1, SEEK_END);
     size = ftell(fp);
     rewind(fp);
+    
+    // determine the prime
     if(size > 271)
     {
         size /= 16;
@@ -33,15 +35,16 @@ int main()
     }
     else
         prime = 13;
-    if (DEBUG) {printf("Actual size %i\n", prime);}
-   
+    
     struct Hash symbolTable = {NULL, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
     struct Stack activeBlock = {NULL, push, pop, printStack, peek};
     struct node* myNode;
-    symbolTable.head = symbolTable.setSize(symbolTable.head, prime);
+    symbolTable.head = symbolTable.setSize(symbolTable.head, prime); // set the symbol table size to prime
 
     while(fscanf(fp,"%s", string)>0)
     {
+        if(DEBUG){printf("Read %s, ", string);}
+        // deal with the GLOBAL variables if the test input is not starts with a '{'
         if(first == 1)
         {
             if(strcmp(string, "{") != 0)
@@ -52,9 +55,7 @@ int main()
                 }
             first = 0;
         }
-
-        if(DEBUG) {printf("string %s action ", string);}
-        if(DEBUG){printf("Read %s\n", string);}
+        
         if(strcmp(string, "{") == 0)
         {
             activeBlock.head = activeBlock.push(activeBlock.head, scope);
@@ -70,30 +71,35 @@ int main()
         else
         {
             index = symbolTable.hashkey(string, prime);
-            if(DEBUG){printf("Index %lli\n", index);}
+            if(DEBUG){printf("hashkey %lli, ", index);}
 
             if((myNode = symbolTable.findInScope(symbolTable.head, string, activeBlock.peek(activeBlock.head) , index)) == NULL)
             {
+                // not found in currect scope
+                if(DEBUG){printf("not found in currect, ");}
                 if((myNode = symbolTable.findInGlobal(symbolTable.head, activeBlock.head, string, index)) == NULL)
                 {
-                    if(DEBUG) {printf("insert\n");}
+                    // not found in global scope
+                    if(DEBUG){printf("not found in global, ");}
                     symbolTable.insertToHash(symbolTable.head, string, activeBlock.peek(activeBlock.head), index);
+                    if(DEBUG){printf("inserted to ST\n");}
                 }
                 else
                 {
-                    if(DEBUG) {printf("Found in Global\n");}
                     // found in global scope
+                    if(DEBUG){printf("found in global scope %d\n", myNode->scope);}
                 }
             }
             else
             {
-                if(DEBUG) {printf("Found in Local\n");}
                 // found in current scope
+                if(DEBUG){printf("found in current scope %d\n", activeBlock.peek(activeBlock.head));}
             }
         }
     }
-    symbolTable.display(symbolTable.head, prime);
-    activeBlock.printStack(activeBlock.head, "Active Block");
+    fclose(fp);
+    symbolTable.display(symbolTable.head, prime); // display the symbol table
+    activeBlock.printStack(activeBlock.head, "Active Block"); // display the active block # stack
     return 0;
 }
 
