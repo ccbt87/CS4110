@@ -17,7 +17,7 @@ Compiler: gcc 6.2.0
 * Dynamic allocation of space for id names
 * Optimized hash function
 * Chained Hash Table
-### Stack.h - Active scope number stack
+### stack.h - Active scope number stack
 * Current scope is on the top of the stack 
 ### source.c - Driver program
 * Read input from file
