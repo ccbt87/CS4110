@@ -1,10 +1,6 @@
 #ifndef HEADER_STACK
 #define HEADER_STACK
 
-#include "stdlib.h"
-#include "stdio.h"
-#include "string.h"
-
 struct block
 {
     int scope;

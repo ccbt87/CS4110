@@ -1,7 +1,6 @@
 #ifndef HEADER_HASH
 #define HEADER_HASH
 
-#include "stdlib.h"
 #include "stack.h"
 
 struct node
