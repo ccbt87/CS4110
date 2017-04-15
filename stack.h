@@ -43,7 +43,6 @@ struct block* pop(struct block* b)
     struct block* myTemp;
     myTemp = b;
     b = myTemp->next;
-    pop_scope = scope;
     return b;
 }
 
