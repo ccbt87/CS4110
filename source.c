@@ -12,7 +12,7 @@ int main()
 {
     FILE *fp;
     int lines = 0;
-    int prime = 13; // default prime
+    int prime = 0;
     int scope = 0;
     int index = 0;    
     char c;
@@ -36,12 +36,17 @@ int main()
                 break;
         }
     }
+    else
+    {
+        prime = 13;
+    }
     struct hash symbolTable = {NULL, 0, 0, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
     struct stack activeBlock = {NULL, push, pop, printStack, create, peek};
     activeBlock.create();
     struct node* myNode;
     symbolTable.setSize(prime);     // set the symbol table size to i
     char string[256];
+
     while(fscanf(fp,"%s", string)>0)
     {
         if(DEBUG){printf("Read %s, ", string);}
