@@ -60,6 +60,7 @@ void printStack(struct block* b, char* name)
             printf("Block ID: %i\n", myBlock->scope);
             myBlock = myBlock->next;
         }
+        free(myBlock);
     }
     else
     {

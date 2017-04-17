@@ -16,7 +16,7 @@ int main()
     int first = 1;
     long long index = 0;
     char string[256]; // buffer to read in string from a file
-    fp = fopen("testinput5.txt", "r"); // specify input file name here
+    fp = fopen("testinput1.txt", "r"); // specify input file name here
     fseek(fp, 1, SEEK_END);
     size = ftell(fp);
     rewind(fp);
