@@ -61,7 +61,10 @@ void printStack(struct block* b, char* name)
             myBlock = myBlock->next;
         }
     }
-    free(myBlock);
+    else
+    {
+        printf("%s Contents nothing\n", name);
+    }
 }
 
 #endif

@@ -1,0 +1,106 @@
+Prime: 13
+
+Read {, Scope 0 pushed.
+Active Block Contents
+Block ID: 0
+
+Read {, Scope 1 pushed.
+Active Block Contents
+Block ID: 1
+Block ID: 0
+
+Read a, hashkey 6, not found in currect, not found in global, insert to ST.
+Data at index 6 in Symbol Table:
+Scope       String
+------------------
+1           a
+
+Read b, hashkey 7, not found in currect, not found in global, insert to ST.
+Data at index 6 in Symbol Table:
+Scope       String
+------------------
+1           a
+
+Data at index 7 in Symbol Table:
+Scope       String
+------------------
+1           b
+
+Read c, hashkey 8, not found in currect, not found in global, insert to ST.
+Data at index 6 in Symbol Table:
+Scope       String
+------------------
+1           a
+
+Data at index 7 in Symbol Table:
+Scope       String
+------------------
+1           b
+
+Data at index 8 in Symbol Table:
+Scope       String
+------------------
+1           c
+
+Read }, Scope 1 popped.
+Active Block Contents
+Block ID: 0
+
+Read {, Scope 2 pushed.
+Active Block Contents
+Block ID: 2
+Block ID: 0
+
+Read x, hashkey 3, not found in currect, not found in global, insert to ST.
+Data at index 3 in Symbol Table:
+Scope       String
+------------------
+2           x
+
+Data at index 6 in Symbol Table:
+Scope       String
+------------------
+1           a
+
+Data at index 7 in Symbol Table:
+Scope       String
+------------------
+1           b
+
+Data at index 8 in Symbol Table:
+Scope       String
+------------------
+1           c
+
+Read x, hashkey 3, found in current scope 2, won't insert.
+Read }, Scope 2 popped.
+Active Block Contents
+Block ID: 0
+
+Read }, Scope 0 popped.
+Active Block Contents nothing
+
+
+========= Finished reading the input file =========
+
+Data at index 3 in Symbol Table:
+Scope       String
+------------------
+2           x
+
+Data at index 6 in Symbol Table:
+Scope       String
+------------------
+1           a
+
+Data at index 7 in Symbol Table:
+Scope       String
+------------------
+1           b
+
+Data at index 8 in Symbol Table:
+Scope       String
+------------------
+1           c
+
+Active Block Contents nothing

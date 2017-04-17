@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "stack.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 int isPrime(int p);
 
@@ -16,16 +16,15 @@ int main()
     int first = 1;
     long long index = 0;
     char string[256]; // buffer to read in string from a file
-    fp = fopen("test.txt", "r"); // specify input file name here
+    fp = fopen("testinput5.txt", "r"); // specify input file name here
     fseek(fp, 1, SEEK_END);
     size = ftell(fp);
     rewind(fp);
     
-    // determine the prime
+    // determine the prime based on file size
     if(size > 271)
     {
         size /= 16;
-        if(DEBUG) {printf("%li size\n", size);}
         prime = size -1;
         for(; ; prime--)
         {
@@ -34,7 +33,8 @@ int main()
         }
     }
     else
-        prime = 13;
+        prime = 13; // default prime for file size smaller than 272
+    if(DEBUG) {printf("Prime: %d\n\n", prime);}
     
     struct Hash symbolTable = {NULL, insertToHash, display, setSize, hashkey, findInScope, findInGlobal};
     struct Stack activeBlock = {NULL, push, pop, printStack, peek};
@@ -59,14 +59,24 @@ int main()
         if(strcmp(string, "{") == 0)
         {
             activeBlock.head = activeBlock.push(activeBlock.head, scope);
-            if(DEBUG){printf("Scope %d pushed\n", scope);}
+            if(DEBUG)
+            {
+                printf("Scope %d pushed.\n", scope);
+                activeBlock.printStack(activeBlock.head, "Active Block");
+                printf("\n");
+            }
             scope++;
         }
         else if(strcmp(string, "}") == 0)
         {
             int scope = activeBlock.peek(activeBlock.head);
             activeBlock.head = activeBlock.pop(activeBlock.head);
-            if(DEBUG){printf("Scope %d popped\n", scope);}
+            if(DEBUG)
+            {
+                printf("Scope %d popped.\n", scope);
+                activeBlock.printStack(activeBlock.head, "Active Block");
+                printf("\n");
+            }
         }
         else
         {
@@ -80,25 +90,32 @@ int main()
                 if((myNode = symbolTable.findInGlobal(symbolTable.head, activeBlock.head, string, index)) == NULL)
                 {
                     // not found in global scope
-                    if(DEBUG){printf("not found in global, ");}
                     symbolTable.insertToHash(symbolTable.head, string, activeBlock.peek(activeBlock.head), index);
-                    if(DEBUG){printf("inserted to ST\n");}
+                    if(DEBUG)
+                    {
+                        printf("not found in global, ");
+                        printf("insert to ST.");
+                        symbolTable.display(symbolTable.head, prime); 
+                        printf("\n");
+                    }
                 }
                 else
                 {
                     // found in global scope
-                    if(DEBUG){printf("found in global scope %d\n", myNode->scope);}
+                    if(DEBUG){printf("found in global scope %d, won't insert.\n", myNode->scope);}
                 }
             }
             else
             {
                 // found in current scope
-                if(DEBUG){printf("found in current scope %d\n", activeBlock.peek(activeBlock.head));}
+                if(DEBUG){printf("found in current scope %d, won't insert.\n", activeBlock.peek(activeBlock.head));}
             }
         }
     }
     fclose(fp);
+    printf("\n========= Finished reading the input file =========\n");
     symbolTable.display(symbolTable.head, prime); // display the symbol table
+    printf("\n");
     activeBlock.printStack(activeBlock.head, "Active Block"); // display the active block # stack
     return 0;
 }
