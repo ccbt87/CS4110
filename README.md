@@ -12,14 +12,16 @@ IDE/Editor: Code::Blocks, Notepad++ v7, VIM 7.4.1829
 Compiler: gcc 6.2.0
 ```
 
-## Structures
+## Components and Functions
 ### hash.h - One symbol table
 * Important routines: findInScope(), findInGlobal(), insertToHash(), display()
 * Maintain scope info with the identifier in the symbol table
 * Dynamic allocation of space for id names
+* Store scope number with id names
 * Optimized hash function
 * Chained Hash Table
 ### stack.h - Active scope number stack
+* Store scope numbers that are still open
 * Current scope is on the top of the stack 
 ### source.c - Driver program
 * Read input from file
@@ -33,6 +35,9 @@ Compiler: gcc 6.2.0
 * For every '}' there must be a '{'
 * White space is the delimiter
 * Identifers can be anything other than '{' , '}' or any kind of white space
+* Since the test inputs don't contain the information that indicate whether a identifer is a declaration or not, the program assume:
+    1. If the identifer already exists in current or open scopes, it's not a declaration and will not be added to the Symbol Table.
+    2. If the identifer doesn't exist in current and open scopes, it's a declaration and will be added to the Symbol Table.
 
 ## Compile and Run
 Put hash.h, stack.h, source.c and testinput files in the same directory 
