@@ -7,9 +7,9 @@ Hongjie Z.
 ## Environment
 ```
 Language: C
-OS: Ubuntu 16.10
-IDE/Editor: Code::Blocks, Notepad++ v7, VIM 7.4.1829
-Compiler: gcc 6.2.0
+OS: Windows 10, CentOS 6.8, Ubuntu 16.10
+IDE/Editor: CodeBlocks 16.01, Notepad++ v7, VIM 7.4.1829
+Compiler: gcc 4.4.7, 5.4.0, 6.2.0
 ```
 
 ## Components and Functions
@@ -71,6 +71,7 @@ To turn off the debug mode, go to line 7 in the source.h file, set DEBUG to 0 an
 ```
 #define DEBUG 0
 ```
+
 ### Case 1 - There's no 'x' in local or open scopes, and read in a 'x'
 #### Input
 ```
@@ -175,6 +176,7 @@ Scope       String
 
 Active Block Contents nothing
 ```
+
 ### Case 2 - There's a 'x' in local, and read in a 'x'
 #### Input
 ```
@@ -289,6 +291,7 @@ Scope       String
 
 Active Block Contents nothing
 ```
+
 ### Case 3 - There's no 'x' in local, but there's a 'x' in open scope, and read in a 'x'
 #### Input
 ```
@@ -393,6 +396,7 @@ Scope       String
 0           c
 
 Active Block Contents nothing
+
 ```
 ### Case 4 - There's no 'x' in local, and there's a 'x' in closed scope, and read in a 'x'
 #### Input
@@ -518,8 +522,9 @@ Scope       String
 0           c
 
 Active Block Contents nothing
+
 ```
-### Case 5 - Not all scopes will be closed to show Active Blocks.
+### Case 5 - Uppercase and lowercase id names, long id names, not all scopes were closed in the end.
 #### Input
 ```
 { a A b B { X { a A } { b B c } { F a A c C 
