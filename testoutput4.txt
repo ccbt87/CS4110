@@ -1,0 +1,117 @@
+Prime: 13
+
+Read {, Scope 0 pushed.
+Active Block Contents
+Block ID: 0
+
+Read a, hashkey 6, not found in currect, not found in global, insert to ST.
+Data at index 6 in Symbol Table:
+Scope       String
+------------------
+0           a
+
+Read b, hashkey 7, not found in currect, not found in global, insert to ST.
+Data at index 6 in Symbol Table:
+Scope       String
+------------------
+0           a
+
+Data at index 7 in Symbol Table:
+Scope       String
+------------------
+0           b
+
+Read c, hashkey 8, not found in currect, not found in global, insert to ST.
+Data at index 6 in Symbol Table:
+Scope       String
+------------------
+0           a
+
+Data at index 7 in Symbol Table:
+Scope       String
+------------------
+0           b
+
+Data at index 8 in Symbol Table:
+Scope       String
+------------------
+0           c
+
+Read x, hashkey 3, not found in currect, not found in global, insert to ST.
+Data at index 3 in Symbol Table:
+Scope       String
+------------------
+0           x
+
+Data at index 6 in Symbol Table:
+Scope       String
+------------------
+0           a
+
+Data at index 7 in Symbol Table:
+Scope       String
+------------------
+0           b
+
+Data at index 8 in Symbol Table:
+Scope       String
+------------------
+0           c
+
+Read }, Scope 0 popped.
+Active Block Contents nothing
+
+Read {, Scope 1 pushed.
+Active Block Contents
+Block ID: 1
+
+Read x, hashkey 3, not found in currect, not found in global, insert to ST.
+Data at index 3 in Symbol Table:
+Scope       String
+------------------
+1           x
+0           x
+
+Data at index 6 in Symbol Table:
+Scope       String
+------------------
+0           a
+
+Data at index 7 in Symbol Table:
+Scope       String
+------------------
+0           b
+
+Data at index 8 in Symbol Table:
+Scope       String
+------------------
+0           c
+
+Read }, Scope 1 popped.
+Active Block Contents nothing
+
+
+========= Finished reading the input file =========
+
+Data at index 3 in Symbol Table:
+Scope       String
+------------------
+1           x
+0           x
+
+Data at index 6 in Symbol Table:
+Scope       String
+------------------
+0           a
+
+Data at index 7 in Symbol Table:
+Scope       String
+------------------
+0           b
+
+Data at index 8 in Symbol Table:
+Scope       String
+------------------
+0           c
+
+Active Block Contents nothing
