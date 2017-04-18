@@ -51,6 +51,12 @@ Execute the program
 ./source
 ```
 ### Under Windows
+Put hash.h, stack.h, source.c and testinput files in the same directory. 
+Open CodeBlocks IDE. Create new empty project. 
+Pick project name and location of project folder (example: Desktop). Use GNU GCC Compiler with default options. 
+Copy and paste hash.h, stack.h, source.c and testinput files into the CodeBlocks project folder (example: Desktop/ProjectName/) created in previous step.
+Go back to CodeBlocks. In left side bar under tab "Projects", right-click project name and click "Add Files Recursively" click OK, OK, OK with default options.
+Under "Build" menu click "Build", then also under "Build" menu click "Run", or just use "Build" and "Run" buttons on toolbar.
 
 ## Test
 To switch to another input file, go to line 19 in the source.h file, change the file name and save.
