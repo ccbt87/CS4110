@@ -1,87 +1,70 @@
 #ifndef HEADER_STACK
 #define HEADER_STACK
 
-#include "stdlib.h"
-#include "stdio.h"
-#include "string.h"
-
-void push(int id);
-int pop();
-int peek();
-void printStack(char* name);
-void create();
-
 struct block
 {
     int scope;
     struct block* next;
-
 };
 
-struct stack
+struct Stack
 {
     struct block* head;
-    void (*push)(int);
-    int (*pop)();
-    void (*printStack)(char*);
-    void (*create)();
-    int (*peek)();
-
+    struct block*(*push)(struct block* b, int id);
+    struct block*(*pop)(struct block* b);
+    void (*printStack)(struct block* b, char*);
+    int (*peek)(struct block* b);
 };
 
-struct stack* _stack;
-
-void create()
+struct block* push(struct block* b, int id)
 {
-    _stack = calloc(1, sizeof(struct stack));
-    _stack->head = NULL;
-}
-
-void push(int id)
-{
-    struct block *newBlock;
-    if(!_stack->head)
+    struct block* newBlock;
+    if(!b)
     {
-        newBlock = malloc(1*sizeof(struct block));
+        newBlock = malloc(sizeof(newBlock));
         newBlock->scope = id;
         newBlock->next = NULL;
-        _stack->head = newBlock;
-        return;
+        b = newBlock;
+        return b;
     }
-    newBlock = malloc(1*sizeof(struct block));
-    newBlock->next = _stack->head;
+    newBlock = malloc(sizeof(newBlock));
+    newBlock->next = b;
     newBlock->scope = id;
-    _stack->head = newBlock;
-
+    b = newBlock;
+    return b;
 }
 
-int pop()
+struct block* pop(struct block* b)
 {
-    int scope = _stack->head->scope;
+    int scope = b->scope;
     struct block* myTemp;
-    myTemp = _stack->head->next;
-    free(_stack->head);
-    _stack->head = myTemp;
-    return scope;
+    myTemp = b;
+    b = myTemp->next;
+    return b;
 }
 
-int peek()
+int peek(struct block* b)
 {
-    return _stack->head->scope;
+    return b->scope;
 }
 
-void printStack(char* name)
+void printStack(struct block* b, char* name)
 {
     struct block* myBlock;
-    if(_stack->head)
+    if(b)
     {
         printf("%s Contents\n", name);
-        myBlock = _stack->head;
+        myBlock = b;
         while(myBlock != NULL)
         {
             printf("Block ID: %i\n", myBlock->scope);
             myBlock = myBlock->next;
         }
+        free(myBlock);
+    }
+    else
+    {
+        printf("%s Contents nothing\n", name);
     }
 }
 
