@@ -85,8 +85,8 @@ int main()
 
             if((myNode = symbolTable.findInScope(symbolTable.head, string, activeBlock.peek(activeBlock.head) , index)) == NULL)
             {
-                // not found in currect scope
-                if(DEBUG){printf("not found in currect, ");}
+                // not found in current scope
+                if(DEBUG){printf("not found in current, ");}
                 if((myNode = symbolTable.findInGlobal(symbolTable.head, activeBlock.head, string, index)) == NULL)
                 {
                     // not found in global scope
