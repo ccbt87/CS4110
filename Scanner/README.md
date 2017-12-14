@@ -1,8 +1,8 @@
 # Project 1 - Phase 1 - Lexical analysis
 ## Team Members
-kw5854 - Robert McCook
-pg4425 - Jon Quianzon
-hf6233 - Hongjie Zhu
+Robert M.
+Jon Q.
+Hongjie Z.
 
 ## Environment
 ```
@@ -37,14 +37,14 @@ Execute the program with an input sample file
 ### Input
 See sample.fp
 ### Output Interpretation
-1. Identifier is a string that starts with a lowercase or uppercase letter and followed by 0 to 5 lowercase or uppercase letters or numbers. Since ¡°myStrng¡± in the input has the length of 7, it is not a valid identifier. And the program output ¡°myStrng¡± as Unrecognized.
-2. Integer is a single digit 0 or any positive number or any negative number which has a ¡°-¡± before the negative number and have zero or more blank(s) in between. ¡°+999¡± is not a valid Integer. However it will be interpreted as a Special Symbol ¡°+¡± which is an operator and a positive Integer 999.
-3. Float has a decimal point and have at least one digit on each side. It also has a ¡°-¡± if it¡¯s negative. And if it¡¯s 0.0, there can only be one 0 on the left side of the decimal point. 00.0 is not a valid Float.
+1. Identifier is a string that starts with a lowercase or uppercase letter and followed by 0 to 5 lowercase or uppercase letters or numbers. Since â€œmyStrngâ€ in the input has the length of 7, it is not a valid identifier. And the program output â€œmyStrngâ€ as Unrecognized.
+2. Integer is a single digit 0 or any positive number or any negative number which has a â€œ-â€ before the negative number and have zero or more blank(s) in between. â€œ+999â€ is not a valid Integer. However it will be interpreted as a Special Symbol â€œ+â€ which is an operator and a positive Integer 999.
+3. Float has a decimal point and have at least one digit on each side. It also has a â€œ-â€ if itâ€™s negative. And if itâ€™s 0.0, there can only be one 0 on the left side of the decimal point. 00.0 is not a valid Float.
 4. Char-String is character string which is enclosed within () and can be any length of lowercase or uppercase letters, numbers, spaces and literal \ which represent a new line.
-5. Boolean can only be ¡°T¡± or ¡°F¡±, and these two letters will not be recognized as Identifier. 
-6. White Space is spaces, tabs or return characters, which will be skipped. So there¡¯s no output.
+5. Boolean can only be â€œTâ€ or â€œFâ€, and these two letters will not be recognized as Identifier. 
+6. White Space is spaces, tabs or return characters, which will be skipped. So thereâ€™s no output.
 7. Keyword is the set given in the project instruction and will not be recognized as Identifier.
-8. Special Symbol is the set given in the project instruction. This program doesn¡¯t aim to distinguish its application. However, ¡°{¡° and ¡°}¡± is used for open and close scopes for the Symbol Table, so they will not be stored into the Symbol Table. And ¡°(¡° and ¡°)¡± will be recognized as Special Symbol only if it¡¯s not captured by the Char-String.
+8. Special Symbol is the set given in the project instruction. This program doesnâ€™t aim to distinguish its application. However, â€œ{â€œ and â€œ}â€ is used for open and close scopes for the Symbol Table, so they will not be stored into the Symbol Table. And â€œ(â€œ and â€œ)â€ will be recognized as Special Symbol only if itâ€™s not captured by the Char-String.
 9. Unrecognized is all the other things that were not captured by above rules.
 ### Output
 ```
